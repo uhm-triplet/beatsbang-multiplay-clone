@@ -32,8 +32,8 @@ public class PlayerAim : NetworkBehaviour
         camera.SetActive(true);
         vCam = GetComponentInChildren<CinemachineVirtualCamera>();
         hipFov = vCam.m_Lens.FieldOfView;
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.visible = false;
+        // Cursor.lockState = CursorLockMode.Locked;
         SwitchState(Hip);
     }
     // void Start()

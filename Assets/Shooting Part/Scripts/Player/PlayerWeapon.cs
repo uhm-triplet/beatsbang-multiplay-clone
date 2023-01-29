@@ -22,7 +22,7 @@ public class PlayerWeapon : NetworkBehaviour
     void GetInput()
     {
         fDown = Input.GetButton("Fire1");
-        gDown = Input.GetButton("Grenade");
+        gDown = Input.GetButtonDown("Grenade");
         rDown = Input.GetButtonDown("Reload");
     }
     public override void OnNetworkSpawn()
@@ -39,7 +39,7 @@ public class PlayerWeapon : NetworkBehaviour
         if (!IsOwner) return;
         GetInput();
         Attack();
-        Grenade();
+        GrenadeServerRpc();
         Reload();
     }
 
@@ -60,22 +60,23 @@ public class PlayerWeapon : NetworkBehaviour
         }
     }
 
-    void Grenade()
-    {
-        if (playerItem.hasGrenades == 0) return;
-        if (gDown && !isReloading)
-        {
-            grenadePos.LookAt(playerAim.aimPos);
-            GameObject instantGrenade = Instantiate(grenadeObj, grenadePos.position, grenadePos.rotation);
-            Rigidbody grenadeRigid = instantGrenade.GetComponent<Rigidbody>();
-            grenadeRigid.AddForce(grenadePos.forward * 20, ForceMode.Impulse);
-            grenadeRigid.AddForce(grenadePos.up * 10, ForceMode.Impulse);
-            grenadeRigid.AddTorque(Vector3.back * 10, ForceMode.Impulse);
 
-            playerItem.hasGrenades -= 1;
-            playerItem.grenades[playerItem.hasGrenades].SetActive(false);
-        }
-    }
+    // void Grenade()
+    // {
+    //     if (playerItem.hasGrenades == 0) return;
+    //     if (gDown && !isReloading)
+    //     {
+    //         grenadePos.LookAt(playerAim.aimPos);
+    //         GameObject instantGrenade = Instantiate(grenadeObj, grenadePos.position, grenadePos.rotation);
+    //         Rigidbody grenadeRigid = instantGrenade.GetComponent<Rigidbody>();
+    //         grenadeRigid.AddForce(grenadePos.forward * 20, ForceMode.Impulse);
+    //         grenadeRigid.AddForce(grenadePos.up * 10, ForceMode.Impulse);
+    //         grenadeRigid.AddTorque(Vector3.back * 10, ForceMode.Impulse);
+
+    //         playerItem.hasGrenades -= 1;
+    //         playerItem.grenades[playerItem.hasGrenades].SetActive(false);
+    //     }
+    // }
     void Reload()
     {
         if (playerItem.equipWeapon == null) return;
@@ -101,5 +102,28 @@ public class PlayerWeapon : NetworkBehaviour
         playerItem.equipWeapon.curAmmo += reAmmo;
         playerItem.ammo -= reAmmo;
         isReloading = false;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void GrenadeServerRpc()
+    {
+        // Debug.Log(playerItem.hasGrenades);
+        // if (playerItem.hasGrenades == 0) return;
+
+        //  && !isReloading
+        if (gDown)
+        {
+
+            grenadePos.LookAt(playerAim.aimPos);
+            GameObject instantGrenade = Instantiate(grenadeObj, grenadePos.position, grenadePos.rotation);
+            playerItem.hasGrenades -= 1;
+            playerItem.grenades[playerItem.hasGrenades].SetActive(false);
+            instantGrenade.GetComponent<NetworkObject>().Spawn();
+            // Rigidbody grenadeRigid = instantGrenade.GetComponent<Rigidbody>();
+            // grenadeRigid.AddForce(grenadePos.forward * 20, ForceMode.Impulse);
+            // grenadeRigid.AddForce(grenadePos.up * 10, ForceMode.Impulse);
+            // grenadeRigid.AddTorque(Vector3.back * 10, ForceMode.Impulse);
+
+        }
     }
 }

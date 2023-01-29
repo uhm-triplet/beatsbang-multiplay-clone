@@ -10,6 +10,9 @@ public class Grenade : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        rigid.AddForce(transform.forward * 20, ForceMode.Impulse);
+        rigid.AddForce(transform.up * 10, ForceMode.Impulse);
+        rigid.AddTorque(Vector3.back * 10, ForceMode.Impulse);
         StartCoroutine(Explosion());
     }
 

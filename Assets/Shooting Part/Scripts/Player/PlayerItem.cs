@@ -7,6 +7,7 @@ public class PlayerItem : NetworkBehaviour
 {
     public GameObject[] weapons;
     public int hasWeapon = -1;
+    // public NetworkVariable<int> hasWeapon = new NetworkVariable<int>(-1);
     bool swapped;
 
     public GameObject[] grenades;
@@ -41,7 +42,7 @@ public class PlayerItem : NetworkBehaviour
     {
         if (!IsOwner) return;
         // Interaction();
-        Swap();
+        SwapServerRpc();
     }
 
     void Interaction()
@@ -58,8 +59,10 @@ public class PlayerItem : NetworkBehaviour
         }
     }
 
-    void Swap()
+    [ServerRpc]
+    private void SwapServerRpc()
     {
+
         if ((hasWeapon == 0 || hasWeapon == 1 || hasWeapon == 2) && swapped)
         {
             if (equipWeapon != null) equipWeapon.gameObject.SetActive(false);
