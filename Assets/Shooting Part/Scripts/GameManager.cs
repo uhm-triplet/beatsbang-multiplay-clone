@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Netcode;
 using TMPro;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
     public PlayerItem playerItem;
-    public EnemyTest enemy;
+    // public EnemyTest enemy;
     public float playTime = 754f;
 
     public GameObject gamePanel;
@@ -31,12 +32,14 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+
         playTime -= Time.deltaTime;
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
+
         int minute = (int)(playTime / 60);
         int second = (int)(playTime % 60);
         timerTxt.text = string.Format("{0:00}", minute) + ":" + string.Format("{0:00}", second);
@@ -75,7 +78,7 @@ public class GameManager : MonoBehaviour
             handGunImg.color = new Color(1, 1, 1, 0);
             subMachineGunImg.color = new Color(1, 1, 1, 1);
         }
-        healthBar.localScale = new Vector3(enemy.currentHealth / enemy.maxHealth, 1, 1);
+        // healthBar.localScale = new Vector3(enemy.currentHealth / enemy.maxHealth, 1, 1);
 
 
     }

@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class Activator : MonoBehaviour
+
+
+public class Activator : NetworkBehaviour
 {
     public KeyCode key;
     bool active = false;
@@ -16,6 +19,7 @@ public class Activator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!IsOwner) return;
         if (Input.GetKeyDown(key) && active)
         {
             Destroy(note.gameObject);
@@ -24,6 +28,7 @@ public class Activator : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (!IsOwner) return;
         active = true;
         Debug.Log("touched");
         if (other.gameObject.tag == "Note")
@@ -35,6 +40,7 @@ public class Activator : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
+        if (!IsOwner) return;
         active = false;
     }
 }

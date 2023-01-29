@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using Cinemachine;
 
-public class PlayerAim : MonoBehaviour
+public class PlayerAim : NetworkBehaviour
 {
+
     public Cinemachine.AxisState xAxis, yAxis;
     [SerializeField] Transform camFollowPos;
     [HideInInspector] public CinemachineVirtualCamera vCam;
@@ -24,10 +26,11 @@ public class PlayerAim : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         vCam = GetComponentInChildren<CinemachineVirtualCamera>();
+        hipFov = vCam.m_Lens.FieldOfView;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        hipFov = vCam.m_Lens.FieldOfView;
         SwitchState(Hip);
 
     }
@@ -35,6 +38,7 @@ public class PlayerAim : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!IsOwner) return;
         xAxis.Update(Time.deltaTime);
         yAxis.Update(Time.deltaTime);
 

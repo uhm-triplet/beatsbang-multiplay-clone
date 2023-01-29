@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerItem : MonoBehaviour
+public class PlayerItem : NetworkBehaviour
 {
     public GameObject[] weapons;
     public int hasWeapon = -1;
@@ -34,6 +35,7 @@ public class PlayerItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!IsOwner) return;
         // Interaction();
         Swap();
     }
