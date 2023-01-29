@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NetworkManagerUI : MonoBehaviour
+public class NetworkManagerUI : NetworkBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] private Button serverButton;
@@ -26,4 +26,11 @@ public class NetworkManagerUI : MonoBehaviour
             NetworkManager.Singleton.StartClient();
         });
     }
+
+    // private void OnClientConnectedCallback(ulong clientId)
+    // {
+    //     if (!IsServer) return;
+    //     GetComponent<NetworkObject>().SpawnWithOwnership(clientId);
+    // }
+
 }

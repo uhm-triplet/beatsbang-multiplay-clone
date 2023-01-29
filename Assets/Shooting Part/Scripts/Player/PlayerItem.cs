@@ -27,11 +27,15 @@ public class PlayerItem : NetworkBehaviour
     [HideInInspector] public Weapon equipWeapon;
     Animator animator;
 
-    void Awake()
-    {
-        animator = GetComponentInChildren<Animator>();
-    }
+    [SerializeField] GameObject UI;
 
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner) return;
+        UI.SetActive(true);
+        animator = GetComponentInChildren<Animator>();
+
+    }
     // Update is called once per frame
     void Update()
     {

@@ -25,12 +25,11 @@ public class PlayerWeapon : NetworkBehaviour
         gDown = Input.GetButton("Grenade");
         rDown = Input.GetButtonDown("Reload");
     }
-
-    void Awake()
+    public override void OnNetworkSpawn()
     {
-        playerMove = GetComponentInParent<PlayerMove>();
-        playerItem = GetComponentInParent<PlayerItem>();
-        playerAim = GetComponentInParent<PlayerAim>();
+        playerMove = GetComponent<PlayerMove>();
+        playerItem = GetComponent<PlayerItem>();
+        playerAim = GetComponent<PlayerAim>();
         animator = GetComponentInChildren<Animator>();
     }
 
@@ -97,13 +96,10 @@ public class PlayerWeapon : NetworkBehaviour
 
     void ReloadOut()
     {
-
-
         int requiredAmmo = playerItem.equipWeapon.maxAmmo - playerItem.equipWeapon.curAmmo;
         int reAmmo = playerItem.ammo < requiredAmmo ? playerItem.ammo : requiredAmmo;
         playerItem.equipWeapon.curAmmo += reAmmo;
         playerItem.ammo -= reAmmo;
         isReloading = false;
-        // 장전 갯수 로직 정확하게 바꾸기
     }
 }

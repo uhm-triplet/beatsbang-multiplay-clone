@@ -23,17 +23,24 @@ public class PlayerAim : NetworkBehaviour
     PlayerAimBaseState currentState;
     public PlayerHipFireState Hip = new PlayerHipFireState();
     public PlayerAimState Aim = new PlayerAimState();
-    // Start is called before the first frame update
-    void Start()
-    {
 
+    [SerializeField] GameObject camera;
+    // Start is called before the first frame update
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner) return;
+        camera.SetActive(true);
         vCam = GetComponentInChildren<CinemachineVirtualCamera>();
         hipFov = vCam.m_Lens.FieldOfView;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         SwitchState(Hip);
-
     }
+    // void Start()
+    // {
+
+
+    // }
 
     // Update is called once per frame
     void Update()
@@ -57,6 +64,7 @@ public class PlayerAim : NetworkBehaviour
 
     private void LateUpdate()
     {
+        if (!IsOwner) return;
         camFollowPos.localEulerAngles = new Vector3(yAxis.Value, camFollowPos.localEulerAngles.y, camFollowPos.localEulerAngles.z);
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, xAxis.Value, transform.eulerAngles.z);
     }

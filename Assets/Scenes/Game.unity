@@ -1883,10 +1883,10 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1195264026}
-    PlayerPrefab: {fileID: 8479586548343320302, guid: 5e96f78aa3f90a9428752e83999ec35c, type: 3}
+    PlayerPrefab: {fileID: 7764721496508518126, guid: 290dc2be23d56aa4e948bc7df0fd6757, type: 3}
     NetworkPrefabs:
     - Override: 0
-      Prefab: {fileID: 8479586548343320302, guid: 5e96f78aa3f90a9428752e83999ec35c, type: 3}
+      Prefab: {fileID: 7764721496508518126, guid: 290dc2be23d56aa4e948bc7df0fd6757, type: 3}
       SourcePrefabToOverride: {fileID: 8479586548343320302, guid: 5e96f78aa3f90a9428752e83999ec35c, type: 3}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}

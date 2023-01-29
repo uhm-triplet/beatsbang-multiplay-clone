@@ -28,14 +28,15 @@ public class PlayerMove : NetworkBehaviour
     PlayerWeapon playerWeapon;
 
 
-    // Start is called before the first frame update
-    void Awake()
+
+    public override void OnNetworkSpawn()
     {
-        playerWeapon = GetComponentInParent<PlayerWeapon>();
+        playerWeapon = GetComponent<PlayerWeapon>();
         controller = GetComponent<CharacterController>();
         rigid = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
     }
+
 
     // Update is called once per frame
     void Update()

@@ -39,7 +39,7 @@ public class GameManager : NetworkBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-
+        if (!IsOwner) return;
         int minute = (int)(playTime / 60);
         int second = (int)(playTime % 60);
         timerTxt.text = string.Format("{0:00}", minute) + ":" + string.Format("{0:00}", second);
