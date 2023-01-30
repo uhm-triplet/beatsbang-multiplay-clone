@@ -37,8 +37,9 @@ public class Weapon : MonoBehaviour
         else if (type == Type.Range && curAmmo > 0)
         {
             curAmmo--;
+            Shot();
             // StartCoroutine("Shot");
-            ShotServerRpc();
+
         }
     }
 
@@ -55,26 +56,6 @@ public class Weapon : MonoBehaviour
         trailEffect.enabled = false;
     }
 
-    // IEnumerator Shot()
-    // {
-
-    //     bulletPos.LookAt(playerAim.aimPos);
-    //     GameObject instantBullet = Instantiate(bullet, bulletPos.position, bulletPos.rotation);
-    //     instantBullet.GetComponent<NetworkObject>().Spawn();
-    //     // Rigidbody bulletRigid = instantBullet.GetComponent<Rigidbody>();
-    //     // bulletRigid.AddForce(bulletPos.forward * bulletVelocity, ForceMode.Impulse);
-    //     // Rigidbody bulletRigid = syncBullet.GetComponent<Rigidbody>();
-    //     // bulletRigid.AddForce(bulletPos.forward * bulletVelocity, ForceMode.Impulse);
-
-
-    //     yield return null;
-    //     GameObject instantBulletCase = Instantiate(bulletCase, bulletCasePos.position, bulletCasePos.rotation);
-    //     Rigidbody bulletCaseRigid = instantBulletCase.GetComponent<Rigidbody>();
-    //     Vector3 caseVec = bulletCasePos.forward * Random.Range(-4, -3) + Vector3.up * Random.Range(2, 3);
-    //     bulletCaseRigid.AddForce(caseVec, ForceMode.Impulse);
-    //     bulletCaseRigid.AddTorque(Vector3.up * 10, ForceMode.Impulse);
-
-    // }
 
     [ServerRpc]
     private void ShotServerRpc()
@@ -83,4 +64,25 @@ public class Weapon : MonoBehaviour
         GameObject instantBullet = Instantiate(bullet, bulletPos.position, bulletPos.rotation);
         instantBullet.GetComponent<NetworkObject>().Spawn();
     }
+    // IEnumerator Shot()
+    private void Shot()
+    {
+
+        ShotServerRpc();
+    }
+    // Rigidbody bulletRigid = instantBullet.GetComponent<Rigidbody>();
+    // bulletRigid.AddForce(bulletPos.forward * bulletVelocity, ForceMode.Impulse);
+    // Rigidbody bulletRigid = syncBullet.GetComponent<Rigidbody>();
+    // bulletRigid.AddForce(bulletPos.forward * bulletVelocity, ForceMode.Impulse);
+
+
+    // yield return null;
+    // GameObject instantBulletCase = Instantiate(bulletCase, bulletCasePos.position, bulletCasePos.rotation);
+    // Rigidbody bulletCaseRigid = instantBulletCase.GetComponent<Rigidbody>();
+    // Vector3 caseVec = bulletCasePos.forward * Random.Range(-4, -3) + Vector3.up * Random.Range(2, 3);
+    // bulletCaseRigid.AddForce(caseVec, ForceMode.Impulse);
+    // bulletCaseRigid.AddTorque(Vector3.up * 10, ForceMode.Impulse);
+
+
+
 }

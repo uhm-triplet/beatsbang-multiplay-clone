@@ -13501,7 +13501,7 @@ GameObject:
   - component: {fileID: 7764721496508518125}
   - component: {fileID: 7764721496508518124}
   - component: {fileID: 7764721496508518127}
-  - component: {fileID: 5956743610676420769}
+  - component: {fileID: 2064096112133677195}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -13683,21 +13683,20 @@ MonoBehaviour:
   - {fileID: 7764721495324354514}
   - {fileID: 7764721495438580643}
   - {fileID: 7764721495660842341}
-  hasWeapon:
-    m_InternalValue: -1
+  hasWeapon: -1
+  ammo: 300
+  health: 100
+  hasGrenades: 1
   grenades:
   - {fileID: 7764721496647503860}
   - {fileID: 7764721495204623507}
   - {fileID: 7764721495409704243}
   - {fileID: 7764721496159807152}
-  hasGrenades: 0
-  ammo: 300
-  health: 100
+  kill: 0
+  death: 0
   maxAmmo: 999
   maxHealth: 100
   maxHasGrenades: 4
-  kill: 0
-  death: 0
   equipWeapon: {fileID: 0}
   UI: {fileID: 7764721497212495228}
 --- !u!114 &7764721496508518125
@@ -13715,6 +13714,12 @@ MonoBehaviour:
   isReloading: 0
   grenadeObj: {fileID: 6941707236296863261, guid: 80fa4e4c18b36bd439db537080953b27, type: 3}
   grenadePos: {fileID: 7764721497041909208}
+  spawnedGrenades: []
+  bullet: {fileID: 8584491280387882283, guid: dad56394ce182d647882743f2551d2ad, type: 3}
+  bulletPos: {fileID: 7764721496221937934}
+  spawnedBullets: []
+  maxAmmo: 50
+  curAmmo: 50
 --- !u!114 &7764721496508518124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13757,7 +13762,7 @@ MonoBehaviour:
   ScaleThreshold: 0.01
   InLocalSpace: 0
   Interpolate: 1
---- !u!114 &5956743610676420769
+--- !u!114 &2064096112133677195
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -13884,12 +13889,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7764721496538808286}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89ded18a2992b9c4b8cc97fd46aba61c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerItem: {fileID: 7764721496508518130}
+  playerWeapon: {fileID: 7764721496508518125}
   playTime: 754
   gamePanel: {fileID: 7764721496917104460}
   timerTxt: {fileID: 7764721496884110165}
@@ -19542,6 +19548,7 @@ GameObject:
   - component: {fileID: 7764721496810688688}
   - component: {fileID: 7764721496810688694}
   - component: {fileID: 7764721496810688689}
+  - component: {fileID: 3078691324316862863}
   m_Layer: 0
   m_Name: AimPos
   m_TagString: Untagged
@@ -19614,6 +19621,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3078691324316862863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7764721496810688691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2868252ab5c4d1da357e8f11f1b524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
 --- !u!1 &7764721496884110167
 GameObject:
   m_ObjectHideFlags: 0

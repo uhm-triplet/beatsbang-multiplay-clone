@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Grenade : MonoBehaviour
+public class Grenade : NetworkBehaviour
 {
-    public GameObject meshObj;
+    public PlayerWeapon parent;
     public GameObject effectObj;
     public Rigidbody rigid;
     // Start is called before the first frame update
@@ -22,13 +23,20 @@ public class Grenade : MonoBehaviour
         yield return new WaitForSeconds(3f);
         rigid.velocity = Vector3.zero;
         rigid.angularVelocity = Vector3.zero;
-        meshObj.SetActive(false);
-        effectObj.SetActive(true);
+
 
         RaycastHit[] rayHits = Physics.SphereCastAll(transform.position, 15, Vector3.up, 0, LayerMask.GetMask("Player"));
         foreach (RaycastHit hit in rayHits)
         {
             hit.transform.GetComponent<EnemyTest>().HitByGrenade(transform.position);
         }
+        effectObj.SetActive(true);
+        yield return new WaitForSeconds(3f);
+
+        if (IsOwner)
+            parent.DestroyGrenadeServerRpc();
     }
+
+
+
 }

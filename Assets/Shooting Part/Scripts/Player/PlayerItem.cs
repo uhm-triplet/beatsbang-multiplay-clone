@@ -10,25 +10,26 @@ public class PlayerItem : NetworkBehaviour
     // public NetworkVariable<int> hasWeapon = new NetworkVariable<int>(-1);
     bool swapped;
 
-    public GameObject[] grenades;
-    public int hasGrenades;
-
     public int ammo;
     public int health;
+    public int hasGrenades;
+    public GameObject[] grenades;
 
+    public int kill;
+    public int death;
 
     public int maxAmmo;
     public int maxHealth;
     public int maxHasGrenades;
 
-    public int kill;
-    public int death;
 
-    GameObject nearObject;
-    [HideInInspector] public Weapon equipWeapon;
+    public Weapon equipWeapon;
     Animator animator;
 
     [SerializeField] GameObject UI;
+
+
+    bool sDown;
 
     public override void OnNetworkSpawn()
     {
@@ -41,38 +42,80 @@ public class PlayerItem : NetworkBehaviour
     void Update()
     {
         if (!IsOwner) return;
-        // Interaction();
-        SwapServerRpc();
+        getInput();
+        Swap();
+
+
     }
 
-    void Interaction()
+    void getInput()
     {
-        if (nearObject != null)
+        sDown = Input.GetKeyDown(KeyCode.Z);
+
+    }
+    // void Swap()
+    // {
+    //     if (hasWeapon != -1 && swapped)
+    //     {
+    //         animator.SetTrigger("doSwap");
+    //         SwapServerRpc();
+    //         if (!IsServer)
+    //         {
+    //             if (equipWeapon != null) equipWeapon.gameObject.SetActive(false);
+    //             equipWeapon = weapons[hasWeapon].GetComponent<Weapon>();
+    //             equipWeapon.gameObject.SetActive(true);
+    //             swapped = false;
+    //         }
+    //     }
+    // }
+    void Swap()
+    {
+        if (sDown)
         {
-            if (nearObject.tag == "Weapon")
+            animator.SetTrigger("doSwap");
+            SwapServerRpc();
+            if (!IsServer)
             {
-                Item item = nearObject.GetComponent<Item>();
-                hasWeapon = item.value;
-                swapped = true;
-                Destroy(nearObject);
+                hasWeapon = 2;
+                weapons[2].GetComponent<Weapon>().gameObject.SetActive(true);
+                equipWeapon = weapons[2].GetComponent<Weapon>();
+            }
+            if (IsServer)
+            {
+                SwapClientRpc();
             }
         }
     }
 
-    [ServerRpc]
-    private void SwapServerRpc()
+    [ServerRpc(RequireOwnership = false)]
+    void SwapServerRpc()
     {
-
-        if ((hasWeapon == 0 || hasWeapon == 1 || hasWeapon == 2) && swapped)
-        {
-            if (equipWeapon != null) equipWeapon.gameObject.SetActive(false);
-            equipWeapon = weapons[hasWeapon].GetComponent<Weapon>();
-            equipWeapon.gameObject.SetActive(true);
-
-            animator.SetTrigger("doSwap");
-            swapped = false;
-        }
+        hasWeapon = 2;
+        weapons[2].GetComponent<Weapon>().gameObject.SetActive(true);
+        equipWeapon = weapons[2].GetComponent<Weapon>();
     }
+
+    [ClientRpc]
+    void SwapClientRpc()
+    {
+        hasWeapon = 2;
+        weapons[2].GetComponent<Weapon>().gameObject.SetActive(true);
+        equipWeapon = weapons[2].GetComponent<Weapon>();
+    }
+
+
+
+    // [ServerRpc(RequireOwnership = false)]
+    // private void SwapServerRpc()
+    // {
+
+    //     if (equipWeapon != null) equipWeapon.gameObject.SetActive(false);
+    //     equipWeapon = weapons[hasWeapon].GetComponent<Weapon>();
+    //     equipWeapon.gameObject.SetActive(true);
+
+    //     swapped = false;
+
+    // }
 
     void OnTriggerEnter(Collider other)
     {
@@ -81,7 +124,7 @@ public class PlayerItem : NetworkBehaviour
             Item item = other.GetComponent<Item>();
             hasWeapon = item.value;
             swapped = true;
-            Destroy(other.gameObject);
+            // Destroy(other.gameObject);
         }
 
         if (other.tag == "Item")

@@ -16,7 +16,7 @@ public class PlayerAim : NetworkBehaviour
     public float fovSmoothSpeed = 10;
 
     public Transform aimPos;
-    // [HideInInspector] public Vector3 actualAimPos;
+    // [HideInInspector] public Vector3 aimPos;
     [SerializeField] float aimSmoothSpeed = 50;
     [SerializeField] LayerMask aimMask;
 
@@ -56,7 +56,7 @@ public class PlayerAim : NetworkBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, aimMask))
             aimPos.position = Vector3.Lerp(aimPos.position, hit.point, aimSmoothSpeed * Time.deltaTime);
-        // actualAimPos = hit.point;
+        // aimPos = hit.point;
 
 
         currentState.UpdateState(this);

@@ -8,9 +8,21 @@ public class PlayerNetwork : NetworkBehaviour
     private GameObject networkUI;
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) return;
-        networkUI = GameObject.Find("NetworkManagerCanvas");
-        networkUI.SetActive(false);
+        // if (!IsOwner) return;
+        // networkUI = GameObject.Find("NetworkManagerCanvas");
+        // networkUI.SetActive(false);
+        if (IsServer)
+        {
+            Debug.Log("I am Server");
+        }
+        if (IsHost)
+        {
+            Debug.Log("I am Host");
+        }
+        if (IsClient)
+        {
+            Debug.Log("I am Client");
+        }
 
     }
 }

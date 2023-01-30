@@ -8,6 +8,7 @@ using TMPro;
 public class GameManager : NetworkBehaviour
 {
     public PlayerItem playerItem;
+    public PlayerWeapon playerWeapon;
     // public EnemyTest enemy;
     public float playTime = 754f;
 
@@ -74,6 +75,7 @@ public class GameManager : NetworkBehaviour
         else if (playerItem.hasWeapon == 2)
         {
             weaponAmmoTxt.text = playerItem.equipWeapon.curAmmo + " / " + playerItem.equipWeapon.maxAmmo;
+            // weaponAmmoTxt.text = playerWeapon.curAmmo + " / " + playerWeapon.maxAmmo;
             hammerImg.color = new Color(1, 1, 1, 0);
             handGunImg.color = new Color(1, 1, 1, 0);
             subMachineGunImg.color = new Color(1, 1, 1, 1);
