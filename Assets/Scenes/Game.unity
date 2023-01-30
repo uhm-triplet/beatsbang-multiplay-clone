@@ -1247,6 +1247,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 22428984, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2090,7 +2094,7 @@ MonoBehaviour:
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
-      Prefab: {fileID: 8191625924499411374, guid: feae79d62b719ac4b82095bb8184129c, type: 3}
+      Prefab: {fileID: 5354426998686804237, guid: 475961083ce81fc40a0e9f1ce38407dc, type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}

@@ -608,14 +608,13 @@ GameObject:
   - component: {fileID: 7764721495324354515}
   - component: {fileID: 7764721495324354513}
   - component: {fileID: 7764721495324354512}
-  - component: {fileID: 4199004756974049410}
   m_Layer: 7
   m_Name: Weapon Hammer
   m_TagString: Melee
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7764721495324354515
 Transform:
   m_ObjectHideFlags: 0
@@ -660,31 +659,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   damage: 25
-  rate: 0.8
+  rate: 1.5
   maxAmmo: 0
   curAmmo: -1
+  bullet: {fileID: 0}
   meleeArea: {fileID: 7764721495324354513}
   trailEffect: {fileID: 7764721495810325809}
-  bulletPos: {fileID: 0}
-  bullet: {fileID: 0}
-  bulletCasePos: {fileID: 0}
-  bulletCase: {fileID: 0}
---- !u!114 &4199004756974049410
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7764721495324354514}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!1 &7764721495349861083
 GameObject:
   m_ObjectHideFlags: 0
@@ -895,7 +875,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7764721495438580640}
   - component: {fileID: 7764721495438580641}
-  - component: {fileID: 186404178436939793}
   m_Layer: 7
   m_Name: Weapon HandGun
   m_TagString: Untagged
@@ -937,28 +916,9 @@ MonoBehaviour:
   rate: 0.4
   maxAmmo: 15
   curAmmo: 15
+  bullet: {fileID: 5354426998686804237, guid: 475961083ce81fc40a0e9f1ce38407dc, type: 3}
   meleeArea: {fileID: 0}
   trailEffect: {fileID: 0}
-  bulletPos: {fileID: 7764721496221937934}
-  bullet: {fileID: 5354426998686804237, guid: 475961083ce81fc40a0e9f1ce38407dc, type: 3}
-  bulletCasePos: {fileID: 7764721495923216923}
-  bulletCase: {fileID: 4753449456846808434, guid: fbb9c8f81ea8878418351c3068314235, type: 3}
---- !u!114 &186404178436939793
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7764721495438580643}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!1 &7764721495450110362
 GameObject:
   m_ObjectHideFlags: 0
@@ -7976,7 +7936,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7764721496221937929}
   m_LocalRotation: {x: -0.00000011920926, y: -0.000000021073419, z: 0.00000007375697, w: 1}
-  m_LocalPosition: {x: 1.36, y: 2.66, z: 2.34}
+  m_LocalPosition: {x: 0.85, y: 3.13, z: 2.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13657,8 +13617,8 @@ MonoBehaviour:
       m_LegacyVelocityFilterStrength: 0
   camFollowPos: {fileID: 7764721496191709881}
   vCam: {fileID: 0}
-  adsFov: 40
-  hipFov: 0
+  zoomFov: 40
+  normalFov: 0
   currentFov: 0
   fovSmoothSpeed: 10
   aimPos: {fileID: 7764721496810688688}
@@ -13683,7 +13643,8 @@ MonoBehaviour:
   - {fileID: 7764721495324354514}
   - {fileID: 7764721495438580643}
   - {fileID: 7764721495660842341}
-  hasWeapon: -1
+  hasWeapon:
+    m_InternalValue: 0
   ammo: 300
   health: 100
   hasGrenades: 1
@@ -13715,7 +13676,6 @@ MonoBehaviour:
   grenadeObj: {fileID: 6941707236296863261, guid: 80fa4e4c18b36bd439db537080953b27, type: 3}
   grenadePos: {fileID: 7764721497041909208}
   spawnedGrenades: []
-  bullet: {fileID: 8584491280387882283, guid: dad56394ce182d647882743f2551d2ad, type: 3}
   bulletPos: {fileID: 7764721496221937934}
   spawnedBullets: []
   maxAmmo: 50
@@ -25469,6 +25429,10 @@ PrefabInstance:
       propertyPath: bulletPos
       value: 
       objectReference: {fileID: 7764721496221937934}
+    - target: {fileID: 8191625924499411361, guid: feae79d62b719ac4b82095bb8184129c, type: 3}
+      propertyPath: bulletVelocity
+      value: 300
+      objectReference: {fileID: 0}
     - target: {fileID: 8191625924499411374, guid: feae79d62b719ac4b82095bb8184129c, type: 3}
       propertyPath: m_Name
       value: Weapon SubMachineGun

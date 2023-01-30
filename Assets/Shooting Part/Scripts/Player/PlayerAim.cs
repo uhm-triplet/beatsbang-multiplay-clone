@@ -10,20 +10,17 @@ public class PlayerAim : NetworkBehaviour
     public Cinemachine.AxisState xAxis, yAxis;
     [SerializeField] Transform camFollowPos;
     [HideInInspector] public CinemachineVirtualCamera vCam;
-    public float adsFov = 40;
-    [HideInInspector] public float hipFov;
+
+    public float zoomFov = 40;
+    [HideInInspector] public float normalFov;
     [HideInInspector] public float currentFov;
+    bool zoom = false;
     public float fovSmoothSpeed = 10;
 
     public Transform aimPos;
     // [HideInInspector] public Vector3 aimPos;
     [SerializeField] float aimSmoothSpeed = 50;
     [SerializeField] LayerMask aimMask;
-
-    PlayerAimBaseState currentState;
-    public PlayerHipFireState Hip = new PlayerHipFireState();
-    public PlayerAimState Aim = new PlayerAimState();
-
     [SerializeField] GameObject camera;
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
@@ -31,18 +28,12 @@ public class PlayerAim : NetworkBehaviour
         if (!IsOwner) return;
         camera.SetActive(true);
         vCam = GetComponentInChildren<CinemachineVirtualCamera>();
-        hipFov = vCam.m_Lens.FieldOfView;
+        normalFov = vCam.m_Lens.FieldOfView;
         // Cursor.visible = false;
         // Cursor.lockState = CursorLockMode.Locked;
-        SwitchState(Hip);
+        currentFov = normalFov;
     }
-    // void Start()
-    // {
 
-
-    // }
-
-    // Update is called once per frame
     void Update()
     {
         if (!IsOwner) return;
@@ -58,8 +49,19 @@ public class PlayerAim : NetworkBehaviour
             aimPos.position = Vector3.Lerp(aimPos.position, hit.point, aimSmoothSpeed * Time.deltaTime);
         // aimPos = hit.point;
 
-
-        currentState.UpdateState(this);
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            if (zoom == false)
+            {
+                currentFov = zoomFov;
+                zoom = true;
+            }
+            else
+            {
+                currentFov = normalFov;
+                zoom = false;
+            }
+        }
     }
 
     private void LateUpdate()
@@ -69,9 +71,5 @@ public class PlayerAim : NetworkBehaviour
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, xAxis.Value, transform.eulerAngles.z);
     }
 
-    public void SwitchState(PlayerAimBaseState state)
-    {
-        currentState = state;
-        currentState.EnterState(this);
-    }
+
 }

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8191625924499411360}
   - component: {fileID: 8191625924499411361}
-  - component: {fileID: 3587732715511077301}
   m_Layer: 7
   m_Name: Weapon SubMachineGun 1
   m_TagString: Untagged
@@ -52,28 +51,9 @@ MonoBehaviour:
   rate: 0.1
   maxAmmo: 50
   curAmmo: 50
+  bullet: {fileID: 8584491280387882283, guid: dad56394ce182d647882743f2551d2ad, type: 3}
   meleeArea: {fileID: 0}
   trailEffect: {fileID: 0}
-  bulletPos: {fileID: 0}
-  bullet: {fileID: 8584491280387882283, guid: dad56394ce182d647882743f2551d2ad, type: 3}
-  bulletCasePos: {fileID: 8191625924765037940}
-  bulletCase: {fileID: 4753449456846808434, guid: fbb9c8f81ea8878418351c3068314235, type: 3}
---- !u!114 &3587732715511077301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8191625924499411374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!1 &8191625924745204940
 GameObject:
   m_ObjectHideFlags: 0

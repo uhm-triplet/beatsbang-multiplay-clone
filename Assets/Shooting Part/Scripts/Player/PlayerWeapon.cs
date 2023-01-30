@@ -15,12 +15,12 @@ public class PlayerWeapon : NetworkBehaviour
     public GameObject grenadeObj;
     [SerializeField] Transform grenadePos;
     [SerializeField] private List<GameObject> spawnedGrenades = new List<GameObject>();
-    public GameObject bullet;
+
+
     [SerializeField] Transform bulletPos;
     [SerializeField] private List<GameObject> spawnedBullets = new List<GameObject>();
     public int maxAmmo = 50;
     public int curAmmo = 50;
-
 
 
 
@@ -62,31 +62,54 @@ public class PlayerWeapon : NetworkBehaviour
         fireDelay += Time.deltaTime;
         isFireReady = playerItem.equipWeapon.rate < fireDelay;
 
-        if (fDown && isFireReady && !isReloading && !playerMove.isDodge && curAmmo > 0)
+        if (fDown && isFireReady && !isReloading && !playerMove.isDodge)
         {
-            // playerItem.equipWeapon.Use();
-            animator.SetTrigger("doShot");
             // animator.SetTrigger(playerItem.equipWeapon.type == Weapon.Type.Melee ? "doSwing" : "doShot");
-            curAmmo--;
-            Shot();
-            fireDelay = 0;
+            if (playerItem.equipWeapon.type == Weapon.Type.Melee)
+            {
+                animator.SetTrigger("doSwing");
+                StopCoroutine("Swing");
+                StartCoroutine("Swing");
+                fireDelay = 0;
+            }
+            else if (playerItem.equipWeapon.type == Weapon.Type.Range && curAmmo > 0)
+            {
+                animator.SetTrigger("doShot");
+                // playerItem.equipWeapon.Use();
+                Shot();
+                playerItem.equipWeapon.curAmmo--;
+                fireDelay = 0;
+            }
         }
     }
+    IEnumerator Swing()
+    {
+        yield return new WaitForSeconds(0.1f);
+        playerItem.equipWeapon.meleeArea.enabled = true;
+        playerItem.equipWeapon.trailEffect.enabled = true;
+
+        yield return new WaitForSeconds(0.3f);
+        playerItem.equipWeapon.meleeArea.enabled = false;
+
+        yield return new WaitForSeconds(0.3f);
+        playerItem.equipWeapon.trailEffect.enabled = false;
+    }
+
     private void Shot()
     {
-
         ShotServerRpc();
         if (IsServer)
         {
             ShotClientRpc();
         }
     }
+
     [ServerRpc]
     private void ShotServerRpc()
     {
         animator.SetTrigger("doShot");
         bulletPos.LookAt(playerAim.aimPos);
-        GameObject instantBullet = Instantiate(bullet, bulletPos.position, bulletPos.rotation);
+        GameObject instantBullet = Instantiate(playerItem.equipWeapon.bullet, bulletPos.position, bulletPos.rotation);
         spawnedBullets.Add(instantBullet);
         instantBullet.GetComponent<Bullet>().parent = this;
         instantBullet.GetComponent<NetworkObject>().Spawn();
@@ -97,7 +120,6 @@ public class PlayerWeapon : NetworkBehaviour
     {
         animator.SetTrigger("doShot");
     }
-
     [ServerRpc(RequireOwnership = false)]
     public void DestroyBulletServerRpc()
     {
@@ -106,7 +128,6 @@ public class PlayerWeapon : NetworkBehaviour
         spawnedBullets.Remove(toDestroy);
         Destroy(toDestroy);
     }
-
 
     void Grenade()
     {

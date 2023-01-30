@@ -7,33 +7,37 @@ public class Bullet : NetworkBehaviour
 {
     public PlayerWeapon parent;
     public int damage;
-    [SerializeField] float bulletVelocity = 300;
+    [SerializeField] public float bulletVelocity;
     private Rigidbody rigid;
     void Start()
     {
+
         Rigidbody bulletRigid = GetComponent<Rigidbody>();
-        bulletRigid.AddForce(transform.forward * 300, ForceMode.Impulse);
+        bulletRigid.AddForce(transform.forward * bulletVelocity, ForceMode.Impulse);
     }
 
     private void OnCollisionEnter(Collision other)
     {
         //사라지는 기준 정확하게 바꾸기
         if (!IsOwner) return;
+        // Destroy(gameObject);
         parent.DestroyBulletServerRpc();
-        // if (other.gameObject.tag == "Floor")
-        // {
-        //     Destroy(gameObject, 1);
-        // }
+        if (other.gameObject.tag == "Wall" || other.gameObject.tag == "Floor")
+        {
+
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (!IsOwner) return;
+        // Destroy(gameObject);
         parent.DestroyBulletServerRpc();
-        // if (other.gameObject.tag == "Wall")
-        // {
-        //     Destroy(gameObject);
-        // }
+
+        if (other.gameObject.tag == "Wall" || other.gameObject.tag == "Floor")
+        {
+
+        }
 
     }
 }
