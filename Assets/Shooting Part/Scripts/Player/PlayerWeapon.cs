@@ -28,13 +28,6 @@ public class PlayerWeapon : NetworkBehaviour
     PlayerItem playerItem;
     PlayerMove playerMove;
     PlayerAim playerAim;
-
-    void GetInput()
-    {
-        fDown = Input.GetButton("Fire1");
-        gDown = Input.GetButtonDown("Grenade");
-        rDown = Input.GetButtonDown("Reload");
-    }
     public override void OnNetworkSpawn()
     {
         playerMove = GetComponent<PlayerMove>();
@@ -42,6 +35,8 @@ public class PlayerWeapon : NetworkBehaviour
         playerAim = GetComponent<PlayerAim>();
         animator = GetComponentInChildren<Animator>();
     }
+
+
 
     // Update is called once per frame
     void Update()
@@ -53,6 +48,12 @@ public class PlayerWeapon : NetworkBehaviour
         Reload();
     }
 
+    void GetInput()
+    {
+        fDown = Input.GetButton("Fire1");
+        gDown = Input.GetButtonDown("Grenade");
+        rDown = Input.GetButtonDown("Reload");
+    }
 
     void Attack()
     {
@@ -64,25 +65,48 @@ public class PlayerWeapon : NetworkBehaviour
 
         if (fDown && isFireReady && !isReloading && !playerMove.isDodge)
         {
-            // animator.SetTrigger(playerItem.equipWeapon.type == Weapon.Type.Melee ? "doSwing" : "doShot");
             if (playerItem.equipWeapon.type == Weapon.Type.Melee)
             {
                 animator.SetTrigger("doSwing");
-                StopCoroutine("Swing");
-                StartCoroutine("Swing");
+                // Swing();
+                StopCoroutine("SwingC");
+                StartCoroutine("SwingC");
                 fireDelay = 0;
             }
             else if (playerItem.equipWeapon.type == Weapon.Type.Range && curAmmo > 0)
             {
                 animator.SetTrigger("doShot");
-                // playerItem.equipWeapon.Use();
                 Shot();
                 playerItem.equipWeapon.curAmmo--;
                 fireDelay = 0;
             }
         }
     }
-    IEnumerator Swing()
+
+    // private void Swing()
+    // {
+    //     SwingServerRpc();
+    //     if (IsServer)
+    //     {
+    //         SwingClientRpc();
+    //     }
+    // }
+
+    // [ServerRpc(RequireOwnership = false)]
+    // private void SwingServerRpc()
+    // {
+    //     StopCoroutine("SwingC");
+    //     StartCoroutine("SwingC");
+    // }
+
+    // [ClientRpc]
+    // private void SwingClientRpc()
+    // {
+    //     StopCoroutine("SwingC");
+    //     StartCoroutine("SwingC");
+    // }
+
+    IEnumerator SwingC()
     {
         yield return new WaitForSeconds(0.1f);
         playerItem.equipWeapon.meleeArea.enabled = true;
@@ -104,7 +128,7 @@ public class PlayerWeapon : NetworkBehaviour
         }
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void ShotServerRpc()
     {
         animator.SetTrigger("doShot");
@@ -120,6 +144,7 @@ public class PlayerWeapon : NetworkBehaviour
     {
         animator.SetTrigger("doShot");
     }
+
     [ServerRpc(RequireOwnership = false)]
     public void DestroyBulletServerRpc()
     {

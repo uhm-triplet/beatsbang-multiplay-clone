@@ -7,8 +7,8 @@ using Random = System.Random;
 public class PlayerItem : NetworkBehaviour
 {
     public GameObject[] weapons;
-    // public int hasWeapon.Value = -1;
-    public NetworkVariable<int> hasWeapon = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
+    public int hasWeapon = 0;
+    // public NetworkVariable<int> hasWeapon = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
     bool swapped;
 
     public int ammo;
@@ -31,14 +31,14 @@ public class PlayerItem : NetworkBehaviour
 
 
     bool sDown;
-    int rnd = 0;
+
 
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
         UI.SetActive(true);
         animator = GetComponentInChildren<Animator>();
-        equipWeapon = weapons[hasWeapon.Value].GetComponent<Weapon>();
+        equipWeapon = weapons[hasWeapon].GetComponent<Weapon>();
 
     }
     // Update is called once per frame
@@ -50,7 +50,7 @@ public class PlayerItem : NetworkBehaviour
         if (sDown)
         {
 
-            hasWeapon.Value = new Random().Next(0, 3);
+            hasWeapon = new Random().Next(0, 3);
         }
         Swap();
 
@@ -82,8 +82,8 @@ public class PlayerItem : NetworkBehaviour
     void localSwap()
     {
         if (equipWeapon != null) equipWeapon.gameObject.SetActive(false);
-        weapons[hasWeapon.Value].GetComponent<Weapon>().gameObject.SetActive(true);
-        equipWeapon = weapons[hasWeapon.Value].GetComponent<Weapon>();
+        weapons[hasWeapon].GetComponent<Weapon>().gameObject.SetActive(true);
+        equipWeapon = weapons[hasWeapon].GetComponent<Weapon>();
     }
     void Swap()
     {
@@ -135,7 +135,7 @@ public class PlayerItem : NetworkBehaviour
         if (other.tag == "Weapon")
         {
             Item item = other.GetComponent<Item>();
-            hasWeapon.Value = item.value;
+            hasWeapon = item.value;
             swapped = true;
             // Destroy(other.gameObject);
         }
