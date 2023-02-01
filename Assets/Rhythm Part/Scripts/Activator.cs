@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Activator : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class Activator : MonoBehaviour
         if (Input.GetKeyDown(key) && active)
         {
             Destroy(note.gameObject);
+            AddScore();
+            active = false;
         }
     }
 
@@ -47,6 +50,11 @@ public class Activator : MonoBehaviour
     void OnTriggerExit2D(Collider2D other)
     {
         active = false;
+    }
+
+    void AddScore() {
+        PlayerPrefs.SetInt("Score",PlayerPrefs.GetInt("Score")+100);
+        Debug.Log(PlayerPrefs.GetInt("Score"));
     }
 
     IEnumerator Clicked() {
