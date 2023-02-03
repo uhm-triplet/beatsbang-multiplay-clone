@@ -122,10 +122,6 @@ public class PlayerWeapon : NetworkBehaviour
     private void Shot()
     {
         ShotServerRpc();
-        if (IsServer)
-        {
-            ShotClientRpc();
-        }
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -137,6 +133,10 @@ public class PlayerWeapon : NetworkBehaviour
         spawnedBullets.Add(instantBullet);
         instantBullet.GetComponent<Bullet>().parent = this;
         instantBullet.GetComponent<NetworkObject>().Spawn();
+        if (IsServer)
+        {
+            ShotClientRpc();
+        }
     }
 
     [ClientRpc]
@@ -171,9 +171,6 @@ public class PlayerWeapon : NetworkBehaviour
         spawnedGrenades.Add(instantGrenade);
         instantGrenade.GetComponent<Grenade>().parent = this;
         instantGrenade.GetComponent<NetworkObject>().Spawn();
-        // grenadeRigid.AddForce(grenadePos.forward * 20, ForceMode.Impulse);
-        // grenadeRigid.AddForce(grenadePos.up * 10, ForceMode.Impulse);
-        // grenadeRigid.AddTorque(Vector3.back * 10, ForceMode.Impulse);
 
         playerItem.hasGrenades -= 1;
         playerItem.grenades[playerItem.hasGrenades].SetActive(false);

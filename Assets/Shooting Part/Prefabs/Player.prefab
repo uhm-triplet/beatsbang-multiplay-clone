@@ -614,7 +614,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7764721495324354515
 Transform:
   m_ObjectHideFlags: 0
@@ -13643,7 +13643,7 @@ MonoBehaviour:
   - {fileID: 7764721495324354514}
   - {fileID: 7764721495438580643}
   - {fileID: 7764721495660842341}
-  hasWeapon: 0
+  hasWeapon: 2
   ammo: 300
   health: 100
   hasGrenades: 1
@@ -13657,7 +13657,7 @@ MonoBehaviour:
   maxAmmo: 999
   maxHealth: 100
   maxHasGrenades: 4
-  equipWeapon: {fileID: 7764721495324354512}
+  equipWeapon: {fileID: 7764721495660842346}
   UI: {fileID: 7764721497212495228}
 --- !u!114 &7764721496508518125
 MonoBehaviour:
@@ -25438,7 +25438,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8191625924499411374, guid: feae79d62b719ac4b82095bb8184129c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: feae79d62b719ac4b82095bb8184129c, type: 3}
@@ -25447,6 +25447,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8191625924499411374, guid: feae79d62b719ac4b82095bb8184129c, type: 3}
   m_PrefabInstance: {fileID: 1904835103471656139}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7764721495660842346 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8191625924499411361, guid: feae79d62b719ac4b82095bb8184129c, type: 3}
+  m_PrefabInstance: {fileID: 1904835103471656139}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7764721495660842341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caa58fb0cbf41e040a9fa71e25912336, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7764721495660842347 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8191625924499411360, guid: feae79d62b719ac4b82095bb8184129c, type: 3}

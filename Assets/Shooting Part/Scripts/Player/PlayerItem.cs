@@ -7,9 +7,9 @@ using Random = System.Random;
 public class PlayerItem : NetworkBehaviour
 {
     public GameObject[] weapons;
-    public int hasWeapon = 0;
-    // public NetworkVariable<int> hasWeapon = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
-    bool swapped;
+    // public int hasWeapon = 2;
+    public NetworkVariable<int> hasWeapon = new NetworkVariable<int>(2, NetworkVariableReadPermission.Everyone);
+    public NetworkVariable<bool> swapped = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone);
 
     public int ammo;
     public int health;
@@ -31,6 +31,9 @@ public class PlayerItem : NetworkBehaviour
 
 
     bool sDown;
+    bool oneDown;
+    bool twoDown;
+    bool threeDown;
 
 
     public override void OnNetworkSpawn()
@@ -38,7 +41,7 @@ public class PlayerItem : NetworkBehaviour
         if (!IsOwner) return;
         UI.SetActive(true);
         animator = GetComponentInChildren<Animator>();
-        equipWeapon = weapons[hasWeapon].GetComponent<Weapon>();
+        equipWeapon = weapons[hasWeapon.Value].GetComponent<Weapon>();
 
     }
     // Update is called once per frame
@@ -46,21 +49,15 @@ public class PlayerItem : NetworkBehaviour
     {
         if (!IsOwner) return;
         getInput();
-
-        if (sDown)
-        {
-
-            hasWeapon = new Random().Next(0, 3);
-        }
         Swap();
-
-
     }
 
     void getInput()
     {
         sDown = Input.GetKeyDown(KeyCode.Z);
-
+        oneDown = Input.GetKeyDown(KeyCode.Alpha1);
+        twoDown = Input.GetKeyDown(KeyCode.Alpha2);
+        threeDown = Input.GetKeyDown(KeyCode.Alpha3);
     }
     // void Swap()
     // {
@@ -81,33 +78,66 @@ public class PlayerItem : NetworkBehaviour
 
     void localSwap()
     {
+        // animator.SetTrigger("doSwap");
         if (equipWeapon != null) equipWeapon.gameObject.SetActive(false);
-        weapons[hasWeapon].GetComponent<Weapon>().gameObject.SetActive(true);
-        equipWeapon = weapons[hasWeapon].GetComponent<Weapon>();
+        weapons[hasWeapon.Value].GetComponent<Weapon>().gameObject.SetActive(true);
+        equipWeapon = weapons[hasWeapon.Value].GetComponent<Weapon>();
+        swapped.Value = !swapped.Value;
     }
     void Swap()
     {
-
-        if (sDown)
+        if (oneDown)
         {
+            UpdateSwapServerRpc(0);
             animator.SetTrigger("doSwap");
             SwapServerRpc();
-            if (IsServer)
-            {
-                SwapClientRpc();
-            }
-            if (!IsServer)
-            {
-                localSwap();
-            }
-
         }
+        if (twoDown)
+        {
+            UpdateSwapServerRpc(1);
+            animator.SetTrigger("doSwap");
+            SwapServerRpc();
+        }
+        if (threeDown)
+        {
+            UpdateSwapServerRpc(2);
+            animator.SetTrigger("doSwap");
+            SwapServerRpc();
+        }
+        // if (swapped.Value)
+        // {
+
+        // }
+    }
+
+
+
+    [ServerRpc(RequireOwnership = false)]
+    void UpdateSwapServerRpc(int weaponNumber)
+    {
+        if (NetworkManager.ConnectedClients.ContainsKey(OwnerClientId))
+        {
+            var client = NetworkManager.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerItem>();
+            client.hasWeapon.Value = weaponNumber;
+            swapped.Value = !swapped.Value;
+        }
+    }
+
+    [ClientRpc]
+    void NotifyClientSwapClientRpc(int weaponNumber, ulong clientId)
+    {
+        if (IsOwner) return;
+
     }
 
     [ServerRpc(RequireOwnership = false)]
     void SwapServerRpc()
     {
         localSwap();
+        if (IsServer)
+        {
+            SwapClientRpc();
+        }
     }
 
     [ClientRpc]
@@ -135,8 +165,8 @@ public class PlayerItem : NetworkBehaviour
         if (other.tag == "Weapon")
         {
             Item item = other.GetComponent<Item>();
-            hasWeapon = item.value;
-            swapped = true;
+            hasWeapon.Value = item.value;
+            swapped.Value = !swapped.Value;
             // Destroy(other.gameObject);
         }
 

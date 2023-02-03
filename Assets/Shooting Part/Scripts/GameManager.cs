@@ -51,28 +51,28 @@ public class GameManager : NetworkBehaviour
         deathTxt.text = playerItem.death.ToString();
         grenadeCountTxt.text = playerItem.hasGrenades + " / " + playerItem.maxHasGrenades;
 
-        if (playerItem.hasWeapon == -1)
+        if (playerItem.hasWeapon.Value == -1)
         {
             weaponAmmoTxt.text = "- / -";
             hammerImg.color = new Color(1, 1, 1, 0);
             handGunImg.color = new Color(1, 1, 1, 0);
             subMachineGunImg.color = new Color(1, 1, 1, 0);
         }
-        else if (playerItem.hasWeapon == 0)
+        else if (playerItem.hasWeapon.Value == 0)
         {
             weaponAmmoTxt.text = "- / -";
             hammerImg.color = new Color(1, 1, 1, 1);
             handGunImg.color = new Color(1, 1, 1, 0);
             subMachineGunImg.color = new Color(1, 1, 1, 0);
         }
-        else if (playerItem.hasWeapon == 1)
+        else if (playerItem.hasWeapon.Value == 1)
         {
             weaponAmmoTxt.text = playerItem.equipWeapon.curAmmo + " / " + playerItem.equipWeapon.maxAmmo;
             hammerImg.color = new Color(1, 1, 1, 0);
             handGunImg.color = new Color(1, 1, 1, 1);
             subMachineGunImg.color = new Color(1, 1, 1, 0);
         }
-        else if (playerItem.hasWeapon == 2)
+        else if (playerItem.hasWeapon.Value == 2)
         {
             weaponAmmoTxt.text = playerItem.equipWeapon.curAmmo + " / " + playerItem.equipWeapon.maxAmmo;
             // weaponAmmoTxt.text = playerWeapon.curAmmo + " / " + playerWeapon.maxAmmo;
