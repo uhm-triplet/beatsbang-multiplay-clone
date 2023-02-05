@@ -4,27 +4,36 @@ using UnityEngine;
 
 public class PlayerState : MonoBehaviour
 {
+    public GameObject[] weapons;
+    public int hasWeapon = -1;
 
     public GameObject[] grenades;
     public int hasGrenades;
-
+    public int ammo;
     public int health;
 
-
+    public int maxAmmo;
     public int maxHealth;
     public int maxHasGrenades;
+
+    public int score;
 
     bool isDamage;
 
     GameObject nearObject;
-    public Weapon equipWeapon1;
-    public Weapon equipWeapon2;
+    public Weapon equipWeapon;
+    // public Weapon equipWeapon2;
     Animator animator;
     MeshRenderer[] meshs;
     Rigidbody rigid;
 
     Vector3 impact = Vector3.zero;
     private CharacterController controller;
+
+
+    bool oneDown;
+    bool twoDown;
+    bool threeDown;
 
     void Awake()
     {
@@ -39,23 +48,45 @@ public class PlayerState : MonoBehaviour
     void Update()
     {
         // Interaction();
-        // Swap();
+        getInput();
+        Swap();
     }
 
+    void getInput()
+    {
 
+        oneDown = Input.GetKeyDown(KeyCode.Alpha1);
+        twoDown = Input.GetKeyDown(KeyCode.Alpha2);
+        threeDown = Input.GetKeyDown(KeyCode.Alpha3);
+    }
 
-    // void Swap()
-    // {
-    //     if ((hasWeapon == 0 || hasWeapon == 1 || hasWeapon == 2) && swapped)
-    //     {
-    //         if (equipWeapon != null) equipWeapon.gameObject.SetActive(false);
-    //         equipWeapon = weapons[hasWeapon].GetComponent<Weapon>();
-    //         equipWeapon.gameObject.SetActive(true);
+    void Swap()
+    {
+        if (oneDown)
+        {
+            SwapLogic(0);
+        }
+        if (twoDown)
+        {
+            SwapLogic(1);
 
-    //         animator.SetTrigger("doSwap");
-    //         swapped = false;
-    //     }
-    // }
+        }
+        if (threeDown)
+        {
+            SwapLogic(2);
+
+        }
+    }
+
+    void SwapLogic(int weaponNo)
+    {
+        hasWeapon = weaponNo;
+        if (equipWeapon != null) equipWeapon.gameObject.SetActive(false);
+        equipWeapon = weapons[hasWeapon].GetComponent<Weapon>();
+        equipWeapon.gameObject.SetActive(true);
+
+        animator.SetTrigger("doSwap");
+    }
 
     void OnTriggerEnter(Collider other)
     {

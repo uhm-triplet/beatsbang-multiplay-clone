@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class PlayerWeapon : MonoBehaviour
 {
-    bool f1Down;
-    bool f2Down;
+    bool fDown;
+    // bool f2Down;
     bool rDown;
     bool gDown;
-    bool isFire1Ready;
-    bool isFire2Ready;
-    float fire1Delay;
-    float fire2Delay;
+    bool isFireReady;
+    // bool isFire2Ready;
+    float fireDelay;
+    // float fire2Delay;
     [HideInInspector] public bool isReloading;
 
     public GameObject grenadeObj;
@@ -23,8 +23,8 @@ public class PlayerWeapon : MonoBehaviour
 
     void GetInput()
     {
-        f1Down = Input.GetButton("Fire1");
-        f2Down = Input.GetButton("Fire2");
+        fDown = Input.GetButton("Fire1");
+        // f2Down = Input.GetButton("Fire2");
         gDown = Input.GetButtonDown("Grenade");
         rDown = Input.GetButtonDown("Reload");
     }
@@ -43,31 +43,32 @@ public class PlayerWeapon : MonoBehaviour
         GetInput();
         Attack();
         Grenade();
-        // Reload();
+        Reload();
     }
 
 
     void Attack()
     {
+        if (playerState.equipWeapon == null || playerState.equipWeapon.curAmmo == 0) return;
 
-        fire1Delay += Time.deltaTime;
-        isFire1Ready = playerState.equipWeapon1.rate < fire1Delay;
+        fireDelay += Time.deltaTime;
+        isFireReady = playerState.equipWeapon.rate < fireDelay;
 
-        fire2Delay += Time.deltaTime;
-        isFire2Ready = playerState.equipWeapon2.rate < fire2Delay;
+        // fire2Delay += Time.deltaTime;
+        // isFire2Ready = playerState.equipWeapon2.rate < fire2Delay;
 
-        if (f1Down && isFire1Ready && !playerMove.isDodge)
+        if (fDown && isFireReady && !isReloading && !playerMove.isDodge)
         {
-            playerState.equipWeapon1.Use();
+            playerState.equipWeapon.Use();
             animator.SetTrigger("doShot");
-            fire1Delay = 0;
+            fireDelay = 0;
         }
-        if (f2Down && isFire2Ready && !playerMove.isDodge)
-        {
-            playerState.equipWeapon2.Use();
-            animator.SetTrigger("doShot");
-            fire2Delay = 0;
-        }
+        // if (f2Down && isFire2Ready && !playerMove.isDodge)
+        // {
+        //     playerState.equipWeapon2.Use();
+        //     animator.SetTrigger("doShot");
+        //     fire2Delay = 0;
+        // }
     }
 
     void Grenade()
@@ -86,29 +87,31 @@ public class PlayerWeapon : MonoBehaviour
             playerState.grenades[playerState.hasGrenades].SetActive(false);
         }
     }
-    // void Reload()
-    // {
-    //     if (playerState.equipWeapon == null) return;
 
-    //     if (rDown && isFireReady && !isReloading)
-    //     {
-    //         animator.SetTrigger("doReload");
-    //         isReloading = true;
-    //         Debug.Log("Reload");
+    void Reload()
+    {
+        if (playerState.equipWeapon == null) return;
+        if (playerState.equipWeapon.type == Weapon.Type.Melee) return;
+        if (playerState.ammo == 0) return;
+        if (rDown && isFireReady && !isReloading)
+        {
+            animator.SetTrigger("doReload");
+            isReloading = true;
+            Debug.Log("Reload");
 
-    //         Invoke("ReloadOut", 3f);
-    //     }
-    // }
+            Invoke("ReloadOut", 3f);
+        }
+    }
 
-    // void ReloadOut()
-    // {
+    void ReloadOut()
+    {
 
 
-    //     int requiredAmmo = playerState.equipWeapon.maxAmmo - playerState.equipWeapon.curAmmo;
-    //     int reAmmo = playerState.ammo < requiredAmmo ? playerState.ammo : requiredAmmo;
-    //     playerState.equipWeapon.curAmmo += reAmmo;
-    //     playerState.ammo -= reAmmo;
-    //     isReloading = false;
-    //     // 장전 갯수 로직 정확하게 바꾸기
-    // }
+        int requiredAmmo = playerState.equipWeapon.maxAmmo - playerState.equipWeapon.curAmmo;
+        int reAmmo = playerState.ammo < requiredAmmo ? playerState.ammo : requiredAmmo;
+        playerState.equipWeapon.curAmmo += reAmmo;
+        playerState.ammo -= reAmmo;
+        isReloading = false;
+        // 장전 갯수 로직 정확하게 바꾸기
+    }
 }

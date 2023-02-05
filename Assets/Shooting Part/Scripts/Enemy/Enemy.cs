@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
     public bool isChase;
     public bool isAttack;
     public bool isDead;
+    public bool isBoss;
     public GameObject bullet;
 
     [HideInInspector] public Rigidbody rigid;
@@ -60,8 +61,16 @@ public class Enemy : MonoBehaviour
                 targetRange = 3f;
                 break;
             case Type.C:
-                targetRadius = 0.5f;
-                targetRange = 25f;
+                if (isBoss)
+                {
+                    targetRadius = 0.5f;
+                    targetRange = 45f;
+                }
+                else
+                {
+                    targetRadius = 0.5f;
+                    targetRange = 25f;
+                }
                 break;
 
         }
@@ -105,12 +114,41 @@ public class Enemy : MonoBehaviour
                 break;
 
             case Type.C:
-                yield return new WaitForSeconds(0.4f);
-                GameObject instantBullet = Instantiate(bullet, transform.position, transform.rotation);
-                Rigidbody rigidBullet = instantBullet.GetComponent<Rigidbody>();
-                rigidBullet.velocity = transform.forward * 20;
+                if (isBoss)
+                {
+                    yield return new WaitForSeconds(0.1f);
+                    GameObject instantBullet = Instantiate(bullet, transform.position, transform.rotation);
+                    Rigidbody rigidBullet = instantBullet.GetComponent<Rigidbody>();
+                    rigidBullet.velocity = transform.forward * 40;
+                    yield return new WaitForSeconds(0.1f);
+                    GameObject instantBullet2 = Instantiate(bullet, transform.position, transform.rotation);
+                    Rigidbody rigidBullet2 = instantBullet2.GetComponent<Rigidbody>();
+                    rigidBullet2.velocity = transform.forward * 30;
+                    yield return new WaitForSeconds(0.1f);
+                    GameObject instantBullet3 = Instantiate(bullet, transform.position, transform.rotation);
+                    Rigidbody rigidBullet3 = instantBullet3.GetComponent<Rigidbody>();
+                    rigidBullet3.velocity = transform.forward * 20;
+                    yield return new WaitForSeconds(0.1f);
+                    GameObject instantBullet4 = Instantiate(bullet, transform.position, transform.rotation);
+                    Rigidbody rigidBullet4 = instantBullet4.GetComponent<Rigidbody>();
+                    rigidBullet4.velocity = transform.forward * 10;
+                    yield return new WaitForSeconds(0.1f);
+                    GameObject instantBullet5 = Instantiate(bullet, transform.position, transform.rotation);
+                    Rigidbody rigidBullet5 = instantBullet5.GetComponent<Rigidbody>();
+                    rigidBullet5.velocity = transform.forward * 5;
 
-                yield return new WaitForSeconds(2f);
+                    yield return new WaitForSeconds(1.5f);
+                }
+                else
+                {
+
+                    yield return new WaitForSeconds(0.4f);
+                    GameObject instantBullet = Instantiate(bullet, transform.position, transform.rotation);
+                    Rigidbody rigidBullet = instantBullet.GetComponent<Rigidbody>();
+                    rigidBullet.velocity = transform.forward * 20;
+
+                    yield return new WaitForSeconds(2f);
+                }
 
                 break;
 
