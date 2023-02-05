@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerMove : NetworkBehaviour
+public class PlayerMove : MonoBehaviour
 {
     public float speed;
     float hAxis;
@@ -30,7 +30,7 @@ public class PlayerMove : NetworkBehaviour
 
 
 
-    public override void OnNetworkSpawn()
+    void Awake()
     {
         playerWeapon = GetComponent<PlayerWeapon>();
         playerItem = GetComponent<PlayerItem>();
@@ -43,7 +43,6 @@ public class PlayerMove : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!IsOwner) return;
         Gravity();
         if (playerItem.isDead) return;
         getInput();

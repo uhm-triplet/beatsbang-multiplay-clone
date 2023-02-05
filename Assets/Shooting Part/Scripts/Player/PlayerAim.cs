@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using Cinemachine;
 
-public class PlayerAim : NetworkBehaviour
+public class PlayerAim : MonoBehaviour
 {
 
     public Cinemachine.AxisState xAxis, yAxis;
@@ -25,9 +25,9 @@ public class PlayerAim : NetworkBehaviour
 
     PlayerItem playerItem;
 
-    public override void OnNetworkSpawn()
+    void Awake()
     {
-        if (!IsOwner) return;
+
         camera.SetActive(true);
         vCam = GetComponentInChildren<CinemachineVirtualCamera>();
         normalFov = vCam.m_Lens.FieldOfView;
@@ -39,7 +39,7 @@ public class PlayerAim : NetworkBehaviour
 
     void Update()
     {
-        if (!IsOwner) return;
+
         if (playerItem.isDead) return;
         xAxis.Update(Time.deltaTime);
         yAxis.Update(Time.deltaTime);

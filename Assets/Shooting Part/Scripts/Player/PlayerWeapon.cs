@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerWeapon : NetworkBehaviour
+public class PlayerWeapon : MonoBehaviour
 {
     bool fDown;
     bool rDown;
@@ -14,11 +14,9 @@ public class PlayerWeapon : NetworkBehaviour
 
     public GameObject grenadeObj;
     [SerializeField] Transform grenadePos;
-    [SerializeField] private List<GameObject> spawnedGrenades = new List<GameObject>();
 
 
     [SerializeField] Transform bulletPos;
-    [SerializeField] private List<GameObject> spawnedBullets = new List<GameObject>();
     public int maxAmmo = 50;
     public int curAmmo = 50;
 
@@ -28,7 +26,7 @@ public class PlayerWeapon : NetworkBehaviour
     PlayerItem playerItem;
     PlayerMove playerMove;
     PlayerAim playerAim;
-    public override void OnNetworkSpawn()
+    void Awake()
     {
         playerMove = GetComponent<PlayerMove>();
         playerItem = GetComponent<PlayerItem>();
@@ -41,7 +39,6 @@ public class PlayerWeapon : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!IsOwner) return;
         if (playerItem.isDead) return;
         GetInput();
         Attack();
@@ -84,24 +81,6 @@ public class PlayerWeapon : NetworkBehaviour
     }
 
     private void Swing()
-    {
-        SwingServerRpc();
-        if (IsServer)
-        {
-            SwingClientRpc();
-        }
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void SwingServerRpc()
-    {
-
-        StopCoroutine("SwingC");
-        StartCoroutine("SwingC");
-    }
-
-    [ClientRpc]
-    private void SwingClientRpc()
     {
         StopCoroutine("SwingC");
         StartCoroutine("SwingC");
