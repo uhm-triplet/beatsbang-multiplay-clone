@@ -6,8 +6,8 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public PlayerItem playerItem;
-    public EnemyTest enemy;
+    public PlayerState playerState;
+    public Enemy enemy;
     public float playTime = 754f;
 
     public GameObject gamePanel;
@@ -41,41 +41,40 @@ public class GameManager : MonoBehaviour
         int second = (int)(playTime % 60);
         timerTxt.text = string.Format("{0:00}", minute) + ":" + string.Format("{0:00}", second);
 
-        playerHealthTxt.text = playerItem.health + " / " + playerItem.maxHealth;
-        playerAmmoTxt.text = playerItem.ammo + " / " + playerItem.maxAmmo;
-        killTxt.text = playerItem.kill.ToString();
-        deathTxt.text = playerItem.death.ToString();
-        grenadeCountTxt.text = playerItem.hasGrenades + " / " + playerItem.maxHasGrenades;
+        playerHealthTxt.text = playerState.health + " / " + playerState.maxHealth;
+        // playerAmmoTxt.text = playerState.ammo + " / " + playerState.maxAmmo;
+        // killTxt.text = playerState.kill.ToString();
+        // deathTxt.text = playerState.death.ToString();
+        grenadeCountTxt.text = playerState.hasGrenades + " / " + playerState.maxHasGrenades;
 
-        if (playerItem.hasWeapon == -1)
-        {
-            weaponAmmoTxt.text = "- / -";
-            hammerImg.color = new Color(1, 1, 1, 0);
-            handGunImg.color = new Color(1, 1, 1, 0);
-            subMachineGunImg.color = new Color(1, 1, 1, 0);
-        }
-        else if (playerItem.hasWeapon == 0)
-        {
-            weaponAmmoTxt.text = "- / -";
-            hammerImg.color = new Color(1, 1, 1, 1);
-            handGunImg.color = new Color(1, 1, 1, 0);
-            subMachineGunImg.color = new Color(1, 1, 1, 0);
-        }
-        else if (playerItem.hasWeapon == 1)
-        {
-            weaponAmmoTxt.text = playerItem.equipWeapon.curAmmo + " / " + playerItem.equipWeapon.maxAmmo;
-            hammerImg.color = new Color(1, 1, 1, 0);
-            handGunImg.color = new Color(1, 1, 1, 1);
-            subMachineGunImg.color = new Color(1, 1, 1, 0);
-        }
-        else if (playerItem.hasWeapon == 2)
-        {
-            weaponAmmoTxt.text = playerItem.equipWeapon.curAmmo + " / " + playerItem.equipWeapon.maxAmmo;
-            hammerImg.color = new Color(1, 1, 1, 0);
-            handGunImg.color = new Color(1, 1, 1, 0);
-            subMachineGunImg.color = new Color(1, 1, 1, 1);
-        }
-        healthBar.localScale = new Vector3(enemy.currentHealth / enemy.maxHealth, 1, 1);
+        // if (playerState.hasWeapon == -1)
+        // {
+        //     weaponAmmoTxt.text = "- / -";
+        //     hammerImg.color = new Color(1, 1, 1, 0);
+        //     handGunImg.color = new Color(1, 1, 1, 0);
+        //     subMachineGunImg.color = new Color(1, 1, 1, 0);
+        // }
+        // else if (playerState.hasWeapon == 0)
+        // {
+        //     weaponAmmoTxt.text = "- / -";
+        //     hammerImg.color = new Color(1, 1, 1, 1);
+        //     handGunImg.color = new Color(1, 1, 1, 0);
+        //     subMachineGunImg.color = new Color(1, 1, 1, 0);
+        // }
+        // else if (playerState.hasWeapon == 1)
+        // {
+        //     weaponAmmoTxt.text = playerState.equipWeapon.curAmmo + " / " + playerState.equipWeapon.maxAmmo;
+        //     hammerImg.color = new Color(1, 1, 1, 0);
+        //     handGunImg.color = new Color(1, 1, 1, 1);
+        //     subMachineGunImg.color = new Color(1, 1, 1, 0);
+        // }
+        // else if (playerState.hasWeapon == 2)
+        // {
+        //     weaponAmmoTxt.text = playerState.equipWeapon.curAmmo + " / " + playerState.equipWeapon.maxAmmo;
+        //     hammerImg.color = new Color(1, 1, 1, 0);
+        //     handGunImg.color = new Color(1, 1, 1, 0);
+        //     subMachineGunImg.color = new Color(1, 1, 1, 1);
+        // }
 
 
     }

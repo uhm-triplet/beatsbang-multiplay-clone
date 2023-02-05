@@ -8,8 +8,9 @@ public class PlayerAim : MonoBehaviour
     public Cinemachine.AxisState xAxis, yAxis;
     [SerializeField] Transform camFollowPos;
     [HideInInspector] public CinemachineVirtualCamera vCam;
-    public float adsFov = 40;
-    [HideInInspector] public float hipFov;
+
+
+
     [HideInInspector] public float currentFov;
     public float fovSmoothSpeed = 10;
 
@@ -18,17 +19,14 @@ public class PlayerAim : MonoBehaviour
     [SerializeField] float aimSmoothSpeed = 50;
     [SerializeField] LayerMask aimMask;
 
-    PlayerAimBaseState currentState;
-    public PlayerHipFireState Hip = new PlayerHipFireState();
-    public PlayerAimState Aim = new PlayerAimState();
+
     // Start is called before the first frame update
     void Start()
     {
         vCam = GetComponentInChildren<CinemachineVirtualCamera>();
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        hipFov = vCam.m_Lens.FieldOfView;
-        SwitchState(Hip);
+        currentFov = 60;
 
     }
 
@@ -47,8 +45,6 @@ public class PlayerAim : MonoBehaviour
             aimPos.position = Vector3.Lerp(aimPos.position, hit.point, aimSmoothSpeed * Time.deltaTime);
         // actualAimPos = hit.point;
 
-
-        currentState.UpdateState(this);
     }
 
     private void LateUpdate()
@@ -57,9 +53,5 @@ public class PlayerAim : MonoBehaviour
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, xAxis.Value, transform.eulerAngles.z);
     }
 
-    public void SwitchState(PlayerAimBaseState state)
-    {
-        currentState = state;
-        currentState.EnterState(this);
-    }
+
 }
