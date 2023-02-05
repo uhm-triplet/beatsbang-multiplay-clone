@@ -7936,7 +7936,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7764721496221937929}
   m_LocalRotation: {x: -0.00000011920926, y: -0.000000021073419, z: 0.00000007375697, w: 1}
-  m_LocalPosition: {x: 0.85, y: 3.13, z: 2.34}
+  m_LocalPosition: {x: 0.85, y: 3.13, z: 3.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13538,7 +13538,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 4.2, z: 2}
+  m_Size: {x: 4, y: 5, z: 4}
   m_Center: {x: 0, y: 1, z: 0.2}
 --- !u!33 &7764721496508518129
 MeshFilter:
@@ -13643,9 +13643,13 @@ MonoBehaviour:
   - {fileID: 7764721495324354514}
   - {fileID: 7764721495438580643}
   - {fileID: 7764721495660842341}
-  hasWeapon: 2
+  hasWeapon:
+    m_InternalValue: 2
+  swapped:
+    m_InternalValue: 0
   ammo: 300
-  health: 100
+  health:
+    m_InternalValue: 100
   hasGrenades: 1
   grenades:
   - {fileID: 7764721496647503860}
@@ -13659,6 +13663,7 @@ MonoBehaviour:
   maxHasGrenades: 4
   equipWeapon: {fileID: 7764721495660842346}
   UI: {fileID: 7764721497212495228}
+  isDead: 0
 --- !u!114 &7764721496508518125
 MonoBehaviour:
   m_ObjectHideFlags: 0

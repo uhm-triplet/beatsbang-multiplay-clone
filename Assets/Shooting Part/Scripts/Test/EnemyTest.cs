@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Unity.Netcode;
 public class EnemyTest : MonoBehaviour
 {
     public int maxHealth;
@@ -9,12 +9,33 @@ public class EnemyTest : MonoBehaviour
     Rigidbody rigid;
     BoxCollider boxCollider;
     Material mat;
-
+    public GameObject bullet;
+    public Transform bulletPos;
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
         mat = GetComponent<MeshRenderer>().material;
+    }
+    void Start()
+    {
+        StartCoroutine("EnemyShootStart");
+
+    }
+
+    IEnumerator EnemyShootStart()
+    {
+        yield return new WaitForSeconds(1);
+        StartCoroutine("EnemyShoot");
+    }
+
+    IEnumerator EnemyShoot()
+    {
+        GameObject instantBullet = Instantiate(bullet, bulletPos.position, bulletPos.rotation);
+        instantBullet.GetComponent<NetworkObject>().Spawn();
+        yield return new WaitForSeconds(1);
+        Destroy(instantBullet);
+        StartCoroutine("EnemyShoot");
     }
 
     private void OnTriggerEnter(Collider other)

@@ -26,12 +26,14 @@ public class PlayerMove : NetworkBehaviour
     Rigidbody rigid;
 
     PlayerWeapon playerWeapon;
+    PlayerItem playerItem;
 
 
 
     public override void OnNetworkSpawn()
     {
         playerWeapon = GetComponent<PlayerWeapon>();
+        playerItem = GetComponent<PlayerItem>();
         controller = GetComponent<CharacterController>();
         rigid = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
@@ -42,9 +44,11 @@ public class PlayerMove : NetworkBehaviour
     void Update()
     {
         if (!IsOwner) return;
+        Gravity();
+        if (playerItem.isDead) return;
         getInput();
         move();
-        Gravity();
+
         jump();
         dodge();
         jumpEnd();

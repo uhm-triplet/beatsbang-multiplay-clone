@@ -25,10 +25,10 @@ public class Grenade : NetworkBehaviour
         rigid.angularVelocity = Vector3.zero;
 
 
-        RaycastHit[] rayHits = Physics.SphereCastAll(transform.position, 15, Vector3.up, 0, LayerMask.GetMask("Player"));
+        RaycastHit[] rayHits = Physics.SphereCastAll(transform.position, 25, Vector3.up, 0, LayerMask.GetMask("Player"));
         foreach (RaycastHit hit in rayHits)
         {
-            hit.transform.GetComponent<EnemyTest>().HitByGrenade(transform.position);
+            hit.transform.GetComponent<PlayerItem>().HitByGrenade(transform.position);
         }
         effectObj.SetActive(true);
         yield return new WaitForSeconds(3f);

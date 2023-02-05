@@ -21,11 +21,11 @@ public class Bullet : NetworkBehaviour
         //사라지는 기준 정확하게 바꾸기
         if (!IsOwner) return;
         // Destroy(gameObject);
-        parent.DestroyBulletServerRpc();
         if (other.gameObject.tag == "Wall" || other.gameObject.tag == "Floor")
         {
-
+            parent.DestroyBulletServerRpc();
         }
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -39,5 +39,31 @@ public class Bullet : NetworkBehaviour
 
         }
 
+        if (other.gameObject.tag == "Player")
+        {
+            PlayerBulletHitServerRpc(damage);
+        }
+
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void PlayerBulletHitServerRpc(int damage)
+    {
+        if (NetworkManager.ConnectedClients.ContainsKey(OwnerClientId))
+        {
+            var client = NetworkManager.ConnectedClients[OwnerClientId].PlayerObject.GetComponent<PlayerItem>();
+            client.health.Value -= damage;
+        }
+        if (IsServer)
+        {
+            NotifyClientBulletHitClientRpc(OwnerClientId);
+        }
+    }
+
+    [ClientRpc]
+    void NotifyClientBulletHitClientRpc(ulong clientId)
+    {
+        if (IsOwner) return;
+        Debug.Log(clientId + " Is Hit");
     }
 }

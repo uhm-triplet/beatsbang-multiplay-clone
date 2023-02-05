@@ -42,6 +42,7 @@ public class PlayerWeapon : NetworkBehaviour
     void Update()
     {
         if (!IsOwner) return;
+        if (playerItem.isDead) return;
         GetInput();
         Attack();
         Grenade();
@@ -69,8 +70,7 @@ public class PlayerWeapon : NetworkBehaviour
             {
                 animator.SetTrigger("doSwing");
                 // Swing();
-                StopCoroutine("SwingC");
-                StartCoroutine("SwingC");
+                Swing();
                 fireDelay = 0;
             }
             else if (playerItem.equipWeapon.type == Weapon.Type.Range && curAmmo > 0)
@@ -83,36 +83,38 @@ public class PlayerWeapon : NetworkBehaviour
         }
     }
 
-    // private void Swing()
-    // {
-    //     SwingServerRpc();
-    //     if (IsServer)
-    //     {
-    //         SwingClientRpc();
-    //     }
-    // }
+    private void Swing()
+    {
+        SwingServerRpc();
+        if (IsServer)
+        {
+            SwingClientRpc();
+        }
+    }
 
-    // [ServerRpc(RequireOwnership = false)]
-    // private void SwingServerRpc()
-    // {
-    //     StopCoroutine("SwingC");
-    //     StartCoroutine("SwingC");
-    // }
+    [ServerRpc(RequireOwnership = false)]
+    private void SwingServerRpc()
+    {
 
-    // [ClientRpc]
-    // private void SwingClientRpc()
-    // {
-    //     StopCoroutine("SwingC");
-    //     StartCoroutine("SwingC");
-    // }
+        StopCoroutine("SwingC");
+        StartCoroutine("SwingC");
+    }
+
+    [ClientRpc]
+    private void SwingClientRpc()
+    {
+        StopCoroutine("SwingC");
+        StartCoroutine("SwingC");
+    }
 
     IEnumerator SwingC()
     {
-        yield return new WaitForSeconds(0.1f);
+        animator.SetTrigger("doSwing");
+        yield return new WaitForSeconds(0.01f);
         playerItem.equipWeapon.meleeArea.enabled = true;
         playerItem.equipWeapon.trailEffect.enabled = true;
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.01f);
         playerItem.equipWeapon.meleeArea.enabled = false;
 
         yield return new WaitForSeconds(0.3f);

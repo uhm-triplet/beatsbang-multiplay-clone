@@ -45,7 +45,7 @@ public class GameManager : NetworkBehaviour
         int second = (int)(playTime % 60);
         timerTxt.text = string.Format("{0:00}", minute) + ":" + string.Format("{0:00}", second);
 
-        playerHealthTxt.text = playerItem.health + " / " + playerItem.maxHealth;
+        playerHealthTxt.text = playerItem.health.Value + " / " + playerItem.maxHealth;
         playerAmmoTxt.text = playerItem.ammo + " / " + playerItem.maxAmmo;
         killTxt.text = playerItem.kill.ToString();
         deathTxt.text = playerItem.death.ToString();

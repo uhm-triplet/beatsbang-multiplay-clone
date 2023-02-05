@@ -22,13 +22,16 @@ public class PlayerAim : NetworkBehaviour
     [SerializeField] float aimSmoothSpeed = 50;
     [SerializeField] LayerMask aimMask;
     [SerializeField] GameObject camera;
-    // Start is called before the first frame update
+
+    PlayerItem playerItem;
+
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
         camera.SetActive(true);
         vCam = GetComponentInChildren<CinemachineVirtualCamera>();
         normalFov = vCam.m_Lens.FieldOfView;
+        playerItem = GetComponent<PlayerItem>();
         // Cursor.visible = false;
         // Cursor.lockState = CursorLockMode.Locked;
         currentFov = normalFov;
@@ -37,6 +40,7 @@ public class PlayerAim : NetworkBehaviour
     void Update()
     {
         if (!IsOwner) return;
+        if (playerItem.isDead) return;
         xAxis.Update(Time.deltaTime);
         yAxis.Update(Time.deltaTime);
 
