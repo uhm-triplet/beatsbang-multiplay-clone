@@ -185,7 +185,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41be7ba3127843e498818ae550ee0fd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parent: {fileID: 0}
   damage: 7
+  bulletVelocity: 200
 --- !u!114 &-2913133936125596679
 MonoBehaviour:
   m_ObjectHideFlags: 0
