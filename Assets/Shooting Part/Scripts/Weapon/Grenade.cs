@@ -27,5 +27,7 @@ public class Grenade : MonoBehaviour
         {
             hit.transform.GetComponent<Enemy>().HitByGrenade(transform.position);
         }
+        yield return new WaitForSeconds(3f);
+        Destroy(gameObject);
     }
 }

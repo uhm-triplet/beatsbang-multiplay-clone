@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class BossRock : Bullet
 {
-    Rigidbody rigid;
+    // Rigidbody rigid;
     float angularPower = 2;
     float scaleValue = 0.1f;
     bool isShoot;
 
+
     void Awake()
     {
-        rigid = GetComponent<Rigidbody>();
+        // rigid = GetComponent<Rigidbody>();
         StartCoroutine(GainPowerTimer());
         StartCoroutine(GainPower());
     }
@@ -33,6 +34,8 @@ public class BossRock : Bullet
         }
 
     }
+
+
 
 
 }

@@ -10,7 +10,6 @@ public class NextStage : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            Debug.Log("부딪힘");
             gameManager.NextStage();
         }
     }

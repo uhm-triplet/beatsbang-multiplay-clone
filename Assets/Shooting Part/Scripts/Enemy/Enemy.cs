@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour
     [HideInInspector] public MeshRenderer[] meshs;
     [HideInInspector] public NavMeshAgent nav;
     [HideInInspector] public Animator animator;
-
+    public GameObject effectObj;
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -31,14 +31,15 @@ public class Enemy : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
 
-        if (enemyType != Type.D)
-            Invoke("ChaseStart", 2);
+
     }
 
     void Update()
     {
-        if (nav.enabled && enemyType != Type.D)
+        if (nav.enabled && enemyType != Type.D && Vector3.Magnitude(target.position - transform.position) < 80)
         {
+            if (enemyType != Type.D)
+                ChaseStart();
             nav.SetDestination(target.position);
             nav.isStopped = !isChase;
         }
@@ -58,18 +59,18 @@ public class Enemy : MonoBehaviour
                 break;
             case Type.B:
                 targetRadius = 1f;
-                targetRange = 3f;
+                targetRange = 6f;
                 break;
             case Type.C:
                 if (isBoss)
                 {
                     targetRadius = 0.5f;
-                    targetRange = 45f;
+                    targetRange = 80f;
                 }
                 else
                 {
                     targetRadius = 0.5f;
-                    targetRange = 25f;
+                    targetRange = 60f;
                 }
                 break;
 
@@ -220,6 +221,8 @@ public class Enemy : MonoBehaviour
             isDead = true;
             nav.enabled = false;
             animator.SetTrigger("doDie");
+            if (isBoss)
+                effectObj.SetActive(true);
             foreach (MeshRenderer mesh in meshs)
                 mesh.material.color = Color.gray;
             gameObject.layer = 11;

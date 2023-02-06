@@ -79,19 +79,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 1
-  maxHealth: 80
-  currentHealth: 80
+  maxHealth: 30
+  currentHealth: 30
   target: {fileID: 0}
   meleeArea: {fileID: 6164869501362204680}
   isChase: 0
   isAttack: 0
   isDead: 0
+  isBoss: 0
   bullet: {fileID: 0}
   rigid: {fileID: 0}
   boxCollider: {fileID: 0}
   meshs: []
   nav: {fileID: 0}
   animator: {fileID: 0}
+  effectObj: {fileID: 0}
 --- !u!195 &6164869501728082801
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -102,13 +104,13 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 30
-  m_Acceleration: 100
+  m_Speed: 20
+  m_Acceleration: 1000
   avoidancePriority: 50
   m_AngularSpeed: 360
-  m_StoppingDistance: 0
+  m_StoppingDistance: 5
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0

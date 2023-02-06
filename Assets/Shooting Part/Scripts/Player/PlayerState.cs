@@ -116,7 +116,10 @@ public class PlayerState : MonoBehaviour
                 StartCoroutine(OnDamage(isBossAttack));
             }
             if (other.GetComponent<Rigidbody>() != null)
-                Destroy(other.gameObject);
+            {
+                other.gameObject.GetComponent<Bullet>().OnHit();
+
+            }
         }
 
     }

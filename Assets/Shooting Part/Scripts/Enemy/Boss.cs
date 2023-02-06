@@ -12,6 +12,7 @@ public class Boss : Enemy
     Vector3 lookVec;
     Vector3 tauntVec;
     public bool isLook;
+    public bool isAttacking;
 
     void Awake()
     {
@@ -22,7 +23,6 @@ public class Boss : Enemy
         animator = GetComponentInChildren<Animator>();
 
         nav.isStopped = true;
-        StartCoroutine(Pattern());
     }
 
     void Update()
@@ -30,7 +30,18 @@ public class Boss : Enemy
         if (isDead)
         {
             StopAllCoroutines();
+            rigid.velocity = Vector3.zero;
             return;
+        }
+        if (Vector3.Magnitude(target.position - transform.position) >= 80)
+        {
+            isAttacking = false;
+            return;
+        }
+        if (!isAttacking)
+        {
+            StartCoroutine(Pattern());
+            isAttacking = true;
         }
         if (isLook)
         {

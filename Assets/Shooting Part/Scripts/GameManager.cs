@@ -74,11 +74,23 @@ public class GameManager : MonoBehaviour
         {
             case 1:
                 controller.enabled = false;
-                playerPosition.position = new Vector3(98, 1, 34);
+                playerPosition.position = new Vector3(141, 1, 76);
                 controller.enabled = true;
                 break;
             case 2:
-
+                controller.enabled = false;
+                playerPosition.position = new Vector3(335, 1, 268);
+                controller.enabled = true;
+                break;
+            case 3:
+                controller.enabled = false;
+                playerPosition.position = new Vector3(565, 1, 500);
+                controller.enabled = true;
+                break;
+            case 4:
+                controller.enabled = false;
+                playerPosition.position = new Vector3(792, 1, 724);
+                controller.enabled = true;
                 break;
         }
     }
