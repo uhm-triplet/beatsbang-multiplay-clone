@@ -6,19 +6,32 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public PlayerItem playerItem;
-    public EnemyTest enemy;
+    public PlayerState playerState;
+    public Enemy bossA;
+    public Enemy bossB;
+    public Enemy bossC;
+    public Boss bossD;
     public float playTime = 754f;
+    public int stage = 0;
+    public int enemyACnt = 0;
+    public int enemyBCnt = 0;
+    public int enemyCCnt = 0;
 
     public GameObject gamePanel;
 
     public TextMeshProUGUI timerTxt;
-    public TextMeshProUGUI killTxt;
-    public TextMeshProUGUI deathTxt;
+    public TextMeshProUGUI stageTxt;
+    // public TextMeshProUGUI killTxt;
+    // public TextMeshProUGUI deathTxt;
+    public TextMeshProUGUI scoreTxt;
 
     public TextMeshProUGUI playerHealthTxt;
     public TextMeshProUGUI playerAmmoTxt;
     // public TextMeshProUGUI playerCoinTxt;
+
+    public TextMeshProUGUI EnemyATxt;
+    public TextMeshProUGUI EnemyBTxt;
+    public TextMeshProUGUI EnemyCTxt;
 
     public Image hammerImg;
     public Image handGunImg;
@@ -26,13 +39,62 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI weaponAmmoTxt;
     public TextMeshProUGUI grenadeCountTxt;
 
-    public RectTransform healthGroup;
-    public RectTransform healthBar;
 
+    public Image bossAImg;
+    public Image bossBImg;
+    public Image bossCImg;
+    public Image bossDImg;
+    public RectTransform bossHealthGroup;
+    public RectTransform bossHealthBar;
+
+    public Transform playerPosition;
+    public CharacterController controller;
+
+    void Awake()
+    {
+        weaponAmmoTxt.text = "   - / -";
+        hammerImg.color = new Color(1, 1, 1, 0);
+        handGunImg.color = new Color(1, 1, 1, 0);
+        subMachineGunImg.color = new Color(1, 1, 1, 0);
+        bossAImg.color = new Color(1, 1, 1, 0);
+        bossBImg.color = new Color(1, 1, 1, 0);
+        bossCImg.color = new Color(1, 1, 1, 0);
+        bossDImg.color = new Color(1, 1, 1, 0);
+    }
     void Update()
     {
         playTime -= Time.deltaTime;
+
     }
+
+    public void NextStage()
+    {
+        stage++;
+        switch (stage)
+        {
+            case 1:
+                controller.enabled = false;
+                playerPosition.position = new Vector3(141, 1, 76);
+                controller.enabled = true;
+                break;
+            case 2:
+                controller.enabled = false;
+                playerPosition.position = new Vector3(335, 1, 268);
+                controller.enabled = true;
+                break;
+            case 3:
+                controller.enabled = false;
+                playerPosition.position = new Vector3(565, 1, 500);
+                controller.enabled = true;
+                break;
+            case 4:
+                controller.enabled = false;
+                playerPosition.position = new Vector3(792, 1, 724);
+                controller.enabled = true;
+                break;
+        }
+    }
+
 
     // Update is called once per frame
     void LateUpdate()
@@ -40,43 +102,75 @@ public class GameManager : MonoBehaviour
         int minute = (int)(playTime / 60);
         int second = (int)(playTime % 60);
         timerTxt.text = string.Format("{0:00}", minute) + ":" + string.Format("{0:00}", second);
+        stageTxt.text = "Stage : " + stage;
 
-        playerHealthTxt.text = playerItem.health + " / " + playerItem.maxHealth;
-        playerAmmoTxt.text = playerItem.ammo + " / " + playerItem.maxAmmo;
-        killTxt.text = playerItem.kill.ToString();
-        deathTxt.text = playerItem.death.ToString();
-        grenadeCountTxt.text = playerItem.hasGrenades + " / " + playerItem.maxHasGrenades;
+        playerHealthTxt.text = playerState.health + " / " + playerState.maxHealth;
+        playerAmmoTxt.text = playerState.ammo + " / " + playerState.maxAmmo;
+        scoreTxt.text = playerState.score.ToString();
 
-        if (playerItem.hasWeapon == -1)
+        EnemyATxt.text = enemyACnt.ToString();
+        EnemyBTxt.text = enemyBCnt.ToString();
+        EnemyCTxt.text = enemyCCnt.ToString();
+
+        // killTxt.text = playerState.kill.ToString();
+        // deathTxt.text = playerState.death.ToString();
+        grenadeCountTxt.text = playerState.hasGrenades + " / " + playerState.maxHasGrenades;
+
+        if (playerState.hasWeapon == 0)
         {
-            weaponAmmoTxt.text = "- / -";
-            hammerImg.color = new Color(1, 1, 1, 0);
-            handGunImg.color = new Color(1, 1, 1, 0);
-            subMachineGunImg.color = new Color(1, 1, 1, 0);
-        }
-        else if (playerItem.hasWeapon == 0)
-        {
-            weaponAmmoTxt.text = "- / -";
+            weaponAmmoTxt.text = "   - / -";
             hammerImg.color = new Color(1, 1, 1, 1);
             handGunImg.color = new Color(1, 1, 1, 0);
             subMachineGunImg.color = new Color(1, 1, 1, 0);
         }
-        else if (playerItem.hasWeapon == 1)
+        else if (playerState.hasWeapon == 1)
         {
-            weaponAmmoTxt.text = playerItem.equipWeapon.curAmmo + " / " + playerItem.equipWeapon.maxAmmo;
+            weaponAmmoTxt.text = "  " + playerState.equipWeapon.curAmmo + " / " + playerState.equipWeapon.maxAmmo;
             hammerImg.color = new Color(1, 1, 1, 0);
             handGunImg.color = new Color(1, 1, 1, 1);
             subMachineGunImg.color = new Color(1, 1, 1, 0);
         }
-        else if (playerItem.hasWeapon == 2)
+        else if (playerState.hasWeapon == 2)
         {
-            weaponAmmoTxt.text = playerItem.equipWeapon.curAmmo + " / " + playerItem.equipWeapon.maxAmmo;
+            weaponAmmoTxt.text = playerState.equipWeapon.curAmmo + " / " + playerState.equipWeapon.maxAmmo;
             hammerImg.color = new Color(1, 1, 1, 0);
             handGunImg.color = new Color(1, 1, 1, 0);
             subMachineGunImg.color = new Color(1, 1, 1, 1);
         }
-        healthBar.localScale = new Vector3(enemy.currentHealth / enemy.maxHealth, 1, 1);
 
+
+        if (stage == 1)
+        {
+            bossHealthBar.localScale = new Vector3((float)bossA.currentHealth / bossA.maxHealth, 1, 1);
+            bossAImg.color = new Color(1, 1, 1, 1);
+            bossBImg.color = new Color(1, 1, 1, 0);
+            bossCImg.color = new Color(1, 1, 1, 0);
+            bossDImg.color = new Color(1, 1, 1, 0);
+        }
+        else if (stage == 2)
+        {
+            bossHealthBar.localScale = new Vector3((float)bossB.currentHealth / bossB.maxHealth, 1, 1);
+            bossAImg.color = new Color(1, 1, 1, 0);
+            bossBImg.color = new Color(1, 1, 1, 1);
+            bossCImg.color = new Color(1, 1, 1, 0);
+            bossDImg.color = new Color(1, 1, 1, 0);
+        }
+        else if (stage == 3)
+        {
+            bossHealthBar.localScale = new Vector3((float)bossC.currentHealth / bossC.maxHealth, 1, 1);
+            bossAImg.color = new Color(1, 1, 1, 0);
+            bossBImg.color = new Color(1, 1, 1, 0);
+            bossCImg.color = new Color(1, 1, 1, 1);
+            bossDImg.color = new Color(1, 1, 1, 0);
+        }
+        else if (stage == 4)
+        {
+            bossHealthBar.localScale = new Vector3((float)bossD.currentHealth / bossD.maxHealth, 1, 1);
+            bossAImg.color = new Color(1, 1, 1, 0);
+            bossBImg.color = new Color(1, 1, 1, 0);
+            bossCImg.color = new Color(1, 1, 1, 0);
+            bossDImg.color = new Color(1, 1, 1, 1);
+        }
 
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+
     public enum Type { Melee, Range }
     public Type type;
     public int damage;
@@ -29,6 +30,7 @@ public class Weapon : MonoBehaviour
 
     public void Use()
     {
+
         if (type == Type.Melee)
         {
             StopCoroutine("Swing");
@@ -39,7 +41,9 @@ public class Weapon : MonoBehaviour
             curAmmo--;
             StartCoroutine("Shot");
         }
+
     }
+
 
     IEnumerator Swing()
     {
@@ -53,7 +57,6 @@ public class Weapon : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         trailEffect.enabled = false;
     }
-
     IEnumerator Shot()
     {
 

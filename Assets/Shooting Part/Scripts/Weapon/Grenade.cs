@@ -22,10 +22,12 @@ public class Grenade : MonoBehaviour
         meshObj.SetActive(false);
         effectObj.SetActive(true);
 
-        RaycastHit[] rayHits = Physics.SphereCastAll(transform.position, 15, Vector3.up, 0, LayerMask.GetMask("Player"));
+        RaycastHit[] rayHits = Physics.SphereCastAll(transform.position, 25, Vector3.up, 0, LayerMask.GetMask("Enemy"));
         foreach (RaycastHit hit in rayHits)
         {
-            hit.transform.GetComponent<EnemyTest>().HitByGrenade(transform.position);
+            hit.transform.GetComponent<Enemy>().HitByGrenade(transform.position);
         }
+        yield return new WaitForSeconds(3f);
+        Destroy(gameObject);
     }
 }
