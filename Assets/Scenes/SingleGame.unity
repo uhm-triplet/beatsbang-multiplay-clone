@@ -43039,7 +43039,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1618439810}
   m_LocalRotation: {x: -0.00000011920926, y: -0.000000021073419, z: 0.00000007375697, w: 1}
-  m_LocalPosition: {x: 1.36, y: 2.66, z: 2.34}
+  m_LocalPosition: {x: 0.51, y: 3.23, z: 2.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -58266,6 +58266,14 @@ PrefabInstance:
     - target: {fileID: 5616617984913394770, guid: 07fe5a0065002814d89758b816d49a16, type: 3}
       propertyPath: hasGrenades
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5616617985759100803, guid: 07fe5a0065002814d89758b816d49a16, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 5616617985759100803, guid: 07fe5a0065002814d89758b816d49a16, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.23
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07fe5a0065002814d89758b816d49a16, type: 3}

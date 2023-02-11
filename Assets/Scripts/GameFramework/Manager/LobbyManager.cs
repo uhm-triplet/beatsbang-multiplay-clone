@@ -5,6 +5,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using BeatsBang.Events;
 
 namespace BeatsBang.Core.BeatsBang.Manager
 {
@@ -66,6 +67,7 @@ namespace BeatsBang.Core.BeatsBang.Manager
                 if (newLobby.LastUpdated > _lobby.LastUpdated)
                 {
                     _lobby = newLobby;
+                    LobbyEvents.OnLobbyUpdated?.Invoke(_lobby);
                 }
                 yield return new WaitForSeconds(waitTimeSeconds);
             }
@@ -89,6 +91,36 @@ namespace BeatsBang.Core.BeatsBang.Manager
             {
                 LobbyService.Instance.DeleteLobbyAsync(_lobby.Id);
             }
+        }
+
+        public async Task<bool> JoinLobby(string code, Dictionary<string, string> playerData)
+        {
+            JoinLobbyByCodeOptions options = new JoinLobbyByCodeOptions();
+            Player player = new Player(AuthenticationService.Instance.PlayerId, null, SerializePlayerData(playerData));
+            options.Player = player;
+            try
+            {
+                _lobby = await LobbyService.Instance.JoinLobbyByCodeAsync(code, options);
+
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+            _refreshLobbyCoroutine = StartCoroutine(RefreshLobbyCoroutine(_lobby.Id, 1f));
+            return true;
+        }
+
+        public List<Dictionary<string, PlayerDataObject>> GetPlayersData()
+        {
+            List<Dictionary<string, PlayerDataObject>> data = new List<Dictionary<string, PlayerDataObject>>();
+
+            foreach (Player player in _lobby.Players)
+            {
+                data.Add(player.Data);
+            }
+
+            return data;
         }
     }
 
