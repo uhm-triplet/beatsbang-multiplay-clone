@@ -21,12 +21,13 @@ namespace BeatsBang.Core.BeatsBang.Manager
             return _lobby?.LobbyCode;
         }
 
-        public async Task<bool> CreateLobby(int maxPlayers, bool isPrivate, Dictionary<string, string> data)
+        public async Task<bool> CreateLobby(int maxPlayers, bool isPrivate, Dictionary<string, string> data, Dictionary<string, string> lobbyData)
         {
             Dictionary<string, PlayerDataObject> playerData = SerializePlayerData(data);
             Player player = new Player(AuthenticationService.Instance.PlayerId, null, playerData);
             CreateLobbyOptions options = new CreateLobbyOptions()
             {
+                Data = SerializeLobbyData(lobbyData),
                 IsPrivate = isPrivate,
                 Player = player,
             };
@@ -85,6 +86,18 @@ namespace BeatsBang.Core.BeatsBang.Manager
             return playerData;
         }
 
+        private Dictionary<string, DataObject> SerializeLobbyData(Dictionary<string, string> data)
+        {
+            Dictionary<string, DataObject> lobbyData = new Dictionary<string, DataObject>();
+            foreach (var (key, value) in data)
+            {
+                lobbyData.Add(key, new DataObject(
+                    visibility: DataObject.VisibilityOptions.Member,
+                    value: value));
+            }
+            return lobbyData;
+        }
+
         public void OnApplicationQuit()
         {
             if (_lobby != null && _lobby.HostId == AuthenticationService.Instance.PlayerId)
@@ -121,6 +134,55 @@ namespace BeatsBang.Core.BeatsBang.Manager
             }
 
             return data;
+        }
+
+        public async Task<bool> UpdatePlayerData(string playerId, Dictionary<string, string> data, string allocationId = default, string connectionData = default)
+        {
+            Dictionary<string, PlayerDataObject> playerData = SerializePlayerData(data);
+            UpdatePlayerOptions options = new UpdatePlayerOptions()
+            {
+                Data = playerData,
+                AllocationId = allocationId,
+                ConnectionInfo = connectionData
+            };
+            try
+            {
+                _lobby = await LobbyService.Instance.UpdatePlayerAsync(_lobby.Id, playerId, options);
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+
+            LobbyEvents.OnLobbyUpdated(_lobby);
+
+            return true;
+        }
+
+        public async Task<bool> UpdateLobbyData(Dictionary<string, string> data)
+        {
+            Dictionary<string, DataObject> lobbyData = SerializeLobbyData(data);
+            UpdateLobbyOptions options = new UpdateLobbyOptions()
+            {
+                Data = lobbyData
+            };
+
+            try
+            {
+                _lobby = await LobbyService.Instance.UpdateLobbyAsync(_lobby.Id, options);
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+            LobbyEvents.OnLobbyUpdated(_lobby);
+            return true;
+
+        }
+
+        public string GetHostId()
+        {
+            return _lobby.HostId;
         }
     }
 
