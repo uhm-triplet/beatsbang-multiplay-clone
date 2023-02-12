@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class MPlayerState : MonoBehaviour
+public class MPlayerState : NetworkBehaviour
 {
     public GameObject[] weapons;
     public int hasWeapon = -1;
@@ -35,18 +36,20 @@ public class MPlayerState : MonoBehaviour
     bool twoDown;
     bool threeDown;
 
-    void Awake()
+    public override void OnNetworkSpawn()
     {
-        impact.z = -50;
-        animator = GetComponentInChildren<Animator>();
-        rigid = GetComponent<Rigidbody>();
         meshs = GetComponentsInChildren<MeshRenderer>();
+        animator = GetComponentInChildren<Animator>();
+        if (!IsOwner) return;
+        impact.z = -50;
+        rigid = GetComponent<Rigidbody>();
         controller = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!IsOwner) return;
         // Interaction();
         getInput();
         Swap();
@@ -64,28 +67,40 @@ public class MPlayerState : MonoBehaviour
     {
         if (oneDown)
         {
-            SwapLogic(0);
+            SwapServerRpc(0);
+            localSwap(0);
         }
         if (twoDown)
         {
-            SwapLogic(1);
-
+            SwapServerRpc(1);
+            localSwap(1);
         }
         if (threeDown)
         {
-            SwapLogic(2);
-
+            SwapServerRpc(2);
+            localSwap(2);
         }
     }
 
-    void SwapLogic(int weaponNo)
+    void localSwap(int weaponNumber)
     {
-        hasWeapon = weaponNo;
-        if (equipWeapon != null) equipWeapon.gameObject.SetActive(false);
-        equipWeapon = weapons[hasWeapon].GetComponent<MWeapon>();
-        equipWeapon.gameObject.SetActive(true);
-
         animator.SetTrigger("doSwap");
+        hasWeapon = weaponNumber;
+        if (equipWeapon != null) equipWeapon.gameObject.SetActive(false);
+        weapons[hasWeapon].GetComponent<MWeapon>().gameObject.SetActive(true);
+        equipWeapon = weapons[hasWeapon].GetComponent<MWeapon>();
+    }
+
+    [ServerRpc]
+    void SwapServerRpc(int weaponNumber)
+    {
+        SwapClientRpc(weaponNumber);
+    }
+
+    [ClientRpc]
+    void SwapClientRpc(int weaponNumber)
+    {
+        if (!IsOwner) localSwap(weaponNumber);
     }
 
     void OnTriggerEnter(Collider other)

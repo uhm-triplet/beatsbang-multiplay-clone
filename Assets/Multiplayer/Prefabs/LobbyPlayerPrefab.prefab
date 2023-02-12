@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1835155001003488371}
-  - component: {fileID: 6596899938364802489}
   m_Layer: 5
   m_Name: LobbyPlayerPrefab
   m_TagString: Untagged
@@ -39,20 +38,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 400, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &6596899938364802489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5178571927618487903}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b135d512832fd940beed77510922af0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerName: {fileID: 6030274518479203897}
-  _isReadyText: {fileID: 6281247437445760655}
 --- !u!1 &6281247436677400363
 GameObject:
   m_ObjectHideFlags: 0
@@ -64,7 +49,6 @@ GameObject:
   - component: {fileID: 6281247436677400362}
   - component: {fileID: 6281247436677400364}
   - component: {fileID: 6030274518479203897}
-  - component: {fileID: 1674859554448104845}
   m_Layer: 5
   m_Name: PlayerName
   m_TagString: Untagged
@@ -189,20 +173,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &1674859554448104845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6281247436677400363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b135d512832fd940beed77510922af0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerName: {fileID: 0}
-  _isReadyText: {fileID: 0}
 --- !u!1 &6281247437445760653
 GameObject:
   m_ObjectHideFlags: 0
