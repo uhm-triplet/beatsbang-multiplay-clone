@@ -11,8 +11,8 @@ public class MPlayerState : NetworkBehaviour
     public GameObject[] grenades;
     public int hasGrenades;
     public int ammo;
-    public int health;
-
+    public int health = 100;
+    // public NetworkVariable<int> health = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     public int maxAmmo;
     public int maxHealth;
     public int maxHasGrenades;
@@ -31,16 +31,18 @@ public class MPlayerState : NetworkBehaviour
     Vector3 impact = Vector3.zero;
     private CharacterController controller;
 
-
+    [SerializeField] GameObject UI;
     bool oneDown;
     bool twoDown;
     bool threeDown;
+    [HideInInspector] public bool isDead = false;
 
     public override void OnNetworkSpawn()
     {
         meshs = GetComponentsInChildren<MeshRenderer>();
         animator = GetComponentInChildren<Animator>();
         if (!IsOwner) return;
+        UI.SetActive(true);
         impact.z = -50;
         rigid = GetComponent<Rigidbody>();
         controller = GetComponent<CharacterController>();
@@ -53,6 +55,8 @@ public class MPlayerState : NetworkBehaviour
         // Interaction();
         getInput();
         Swap();
+        Die();
+
     }
 
     void getInput()
@@ -106,61 +110,125 @@ public class MPlayerState : NetworkBehaviour
     void OnTriggerEnter(Collider other)
     {
 
-        if (other.tag == "Item")
+        // if (other.tag == "Item")
+        // {
+        //     Item item = other.GetComponent<Item>();
+        //     switch (item.type)
+        //     {
+        //         case Item.Type.Grenade:
+        //             if (hasGrenades == maxHasGrenades)
+        //                 break;
+        //             grenades[hasGrenades].SetActive(true);
+        //             hasGrenades += item.value;
+        //             break;
+        //     }
+        //     Destroy(other.gameObject);
+        // }
+
+
+        if (other.tag == "Bullet")
         {
-            Item item = other.GetComponent<Item>();
-            switch (item.type)
-            {
-                case Item.Type.Grenade:
-                    if (hasGrenades == maxHasGrenades)
-                        break;
-                    grenades[hasGrenades].SetActive(true);
-                    hasGrenades += item.value;
-                    break;
-            }
-            Destroy(other.gameObject);
+            OnDamageClientRpc();
+            LocalOnDamage();
         }
-        else if (other.tag == "EnemyBullet")
+        if (other.tag == "Melee")
         {
-            if (!isDamage)
-            {
-                Bullet enemyBullet = other.GetComponent<Bullet>();
-                health -= enemyBullet.damage;
-                bool isBossAttack = other.name == "BossMeleeArea";
 
-                StartCoroutine(OnDamage(isBossAttack));
-            }
-            if (other.GetComponent<Rigidbody>() != null)
-            {
-                other.gameObject.GetComponent<Bullet>().OnHit();
-
-            }
+            health -= 1;
+            OnDamageClientRpc();
+            LocalOnDamage();
         }
 
     }
-    IEnumerator OnDamage(bool isBossAttack)
+
+    public void LocalOnDamage()
+    {
+        StartCoroutine(OnDamage());
+    }
+
+    [ServerRpc]
+    void OnDamageServerRpc()
+    {
+        OnDamageClientRpc();
+    }
+
+    [ClientRpc]
+    public void OnDamageClientRpc()
+    {
+        if (IsOwner) return;
+        LocalOnDamage();
+    }
+
+
+    public void HitByGrenade()
+    {
+        health = 0;
+        StartCoroutine(OnDamage());
+    }
+
+    IEnumerator OnDamage()
     {
         isDamage = true;
         foreach (MeshRenderer mesh in meshs)
         {
             mesh.material.color = Color.yellow;
         }
-        if (isBossAttack)
-        {
-            //find better logic
-            controller.Move(impact * 10 * Time.deltaTime);
 
-        }
 
-        yield return new WaitForSeconds(1f);
-        if (isBossAttack)
-            rigid.velocity = Vector3.zero;
-        isDamage = false;
+        yield return new WaitForSeconds(0.5f);
+
         foreach (MeshRenderer mesh in meshs)
         {
             mesh.material.color = Color.white;
         }
 
+    }
+
+    void Die()
+    {
+        if (health <= 0 && !isDead)
+        {
+            DieServerRpc();
+            LocalDie();
+        }
+    }
+    public void LocalDie()
+    {
+        animator.SetTrigger("doDie");
+        isDead = true;
+        if (gameObject.tag == "Player")
+        {
+            ScoreManager.Instance.playerADeath++;
+            ScoreManager.Instance.playerBKill++;
+        }
+        else
+        {
+            ScoreManager.Instance.playerBDeath++;
+            ScoreManager.Instance.playerAKill++;
+        }
+        StartCoroutine(DoRevive());
+
+    }
+
+    [ServerRpc]
+    void DieServerRpc()
+    {
+        DieClientRpc();
+    }
+
+    [ClientRpc]
+    public void DieClientRpc()
+    {
+        if (IsOwner) return;
+        LocalDie();
+    }
+
+
+    IEnumerator DoRevive()
+    {
+        yield return new WaitForSeconds(5);
+        isDead = false;
+        health = 100;
     }
 
 

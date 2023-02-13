@@ -13,6 +13,7 @@ TagManager:
   - Note
   - Enemy
   - EnemyBullet
+  - Player2
   layers:
   - Default
   - TransparentFX
@@ -28,7 +29,7 @@ TagManager:
   - Dead
   - Enemy
   - EnemyBullet
-  - 
+  - Player2
   - 
   - 
   - 

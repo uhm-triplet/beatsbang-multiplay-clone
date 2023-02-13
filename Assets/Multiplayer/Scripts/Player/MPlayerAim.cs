@@ -33,15 +33,15 @@ public class MPlayerAim : NetworkBehaviour
         vCam = GetComponentInChildren<CinemachineVirtualCamera>();
         normalFov = vCam.m_Lens.FieldOfView;
         playerState = GetComponent<MPlayerState>();
-        // Cursor.visible = false;
-        // Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         currentFov = normalFov;
     }
 
     void Update()
     {
         if (!IsOwner) return;
-        // if (playerState.isDead) return;
+        if (playerState.isDead) return;
         xAxis.Update(Time.deltaTime);
         yAxis.Update(Time.deltaTime);
 

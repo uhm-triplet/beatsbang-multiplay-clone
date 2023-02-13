@@ -34,9 +34,9 @@ public class MPlayerWeapon : NetworkBehaviour
     {
         animator = GetComponentInChildren<Animator>();
         playerState = GetComponentInParent<MPlayerState>();
+        playerAim = GetComponentInParent<MPlayerAim>();
         if (!IsOwner) return;
         playerMove = GetComponentInParent<MPlayerMove>();
-        playerAim = GetComponentInParent<MPlayerAim>();
     }
 
     // Update is called once per frame
@@ -62,6 +62,7 @@ public class MPlayerWeapon : NetworkBehaviour
 
         if (fDown && isFireReady && !isReloading && !playerMove.isDodge)
         {
+
             AttackServerRpc();
             localAttack();
         }
@@ -75,7 +76,7 @@ public class MPlayerWeapon : NetworkBehaviour
 
     void localAttack()
     {
-        animator.SetTrigger("doShot");
+        animator.SetTrigger(playerState.equipWeapon.type == MWeapon.Type.Melee ? "doSwing" : "doShot");
         playerState.equipWeapon.Use();
         fireDelay = 0;
     }
@@ -96,16 +97,34 @@ public class MPlayerWeapon : NetworkBehaviour
         if (playerState.hasGrenades == 0) return;
         if (gDown && !isReloading)
         {
-            grenadePos.LookAt(playerAim.aimPos);
-            GameObject instantGrenade = Instantiate(grenadeObj, grenadePos.position, grenadePos.rotation);
-            Rigidbody grenadeRigid = instantGrenade.GetComponent<Rigidbody>();
-            grenadeRigid.AddForce(grenadePos.forward * 20, ForceMode.Impulse);
-            grenadeRigid.AddForce(grenadePos.up * 10, ForceMode.Impulse);
-            grenadeRigid.AddTorque(Vector3.back * 10, ForceMode.Impulse);
-
-            playerState.hasGrenades -= 1;
-            playerState.grenades[playerState.hasGrenades].SetActive(false);
+            GrenadeServerRpc();
+            localGrenade();
         }
+    }
+
+    void localGrenade()
+    {
+        animator.SetTrigger("doShot");
+        grenadePos.LookAt(playerAim.aimPos);
+        GameObject instantGrenade = Instantiate(grenadeObj, grenadePos.position, grenadePos.rotation);
+        Rigidbody grenadeRigid = instantGrenade.GetComponent<Rigidbody>();
+        grenadeRigid.AddForce(grenadePos.forward * 20, ForceMode.Impulse);
+        grenadeRigid.AddForce(grenadePos.up * 10, ForceMode.Impulse);
+        grenadeRigid.AddTorque(Vector3.back * 10, ForceMode.Impulse);
+
+        playerState.hasGrenades -= 1;
+        playerState.grenades[playerState.hasGrenades].SetActive(false);
+    }
+    [ServerRpc]
+    void GrenadeServerRpc()
+    {
+        GrenadeClientRpc();
+    }
+
+    [ClientRpc]
+    void GrenadeClientRpc()
+    {
+        if (!IsOwner) localGrenade();
     }
 
     void Reload()

@@ -22,10 +22,15 @@ public class MGrenade : MonoBehaviour
         meshObj.SetActive(false);
         effectObj.SetActive(true);
 
-        RaycastHit[] rayHits = Physics.SphereCastAll(transform.position, 25, Vector3.up, 0, LayerMask.GetMask("Enemy"));
+        RaycastHit[] rayHits = Physics.SphereCastAll(transform.position, 25, Vector3.up, 0, LayerMask.GetMask("Player"));
+        RaycastHit[] rayHits2 = Physics.SphereCastAll(transform.position, 25, Vector3.up, 0, LayerMask.GetMask("Player2"));
         foreach (RaycastHit hit in rayHits)
         {
-            hit.transform.GetComponent<Enemy>().HitByGrenade(transform.position);
+            hit.transform.GetComponent<MPlayerState>().HitByGrenade();
+        }
+        foreach (RaycastHit hit in rayHits2)
+        {
+            hit.transform.GetComponent<MPlayerState>().HitByGrenade();
         }
         yield return new WaitForSeconds(3f);
         Destroy(gameObject);

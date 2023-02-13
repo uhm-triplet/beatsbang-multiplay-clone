@@ -46,7 +46,7 @@ public class MPlayerMove : NetworkBehaviour
     {
         if (!IsOwner) return;
         Gravity();
-        // if (playerState.isDead) return;
+        if (playerState.isDead) return;
         getInput();
         move();
 

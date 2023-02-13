@@ -26,16 +26,11 @@ public class DebugNetworkManagerUI : NetworkBehaviour
         {
 
             NetworkManager.Singleton.StartClient();
+
         });
 
     }
 
 
-
-    // private void OnClientConnectedCallback(ulong clientId)
-    // {
-    //     if (!IsServer) return;
-    //     GetComponent<NetworkObject>().SpawnWithOwnership(clientId);
-    // }
 
 }
